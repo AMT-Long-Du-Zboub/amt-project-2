@@ -11,3 +11,4 @@ Feature: Basic operations on registrations
   Scenario: get the list of registered applications
     When I send a GET to the /registrations endpoint
     Then I receive a 200 status code
+
