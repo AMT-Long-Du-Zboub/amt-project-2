@@ -1,5 +1,7 @@
 package amt.project2.gamification.api.spec.helpers;
 
+import amt.project2.gamification.api.DefaultApiTest;
+
 import amt.project2.gamification.api.DefaultApi;
 
 
