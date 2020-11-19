@@ -1,5 +1,6 @@
 package amt.project2.gamification.api.spec.helpers;
-import amt.project2.gamification.api.dto.DefaultApiTest;
+import amt.project2.gamification.api.DefaultApiTest;
+import amt.project2.gamification.api.DefaultApi;
 
 
 import java.io.IOException;
