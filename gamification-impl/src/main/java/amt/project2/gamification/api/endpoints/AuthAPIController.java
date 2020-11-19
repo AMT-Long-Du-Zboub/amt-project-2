@@ -21,8 +21,10 @@ public class AuthAPIController implements AuthApi {
     public ResponseEntity authenticateApplicationAndGetToken(@RequestBody Credentials credentials) {
         String appName = credentials.getApplicationName();
         String password = credentials.getPassword();
+
         ApplicationEntity targetApp = applicationRepository.findByName(appName);
-        if(targetApp != null) {
+
+        if(targetApp != null && targetApp.getPassword().equals(password)) {
             Token token = new Token();
             token.setApplicationName(targetApp.getName());
             return ResponseEntity.ok(token);
