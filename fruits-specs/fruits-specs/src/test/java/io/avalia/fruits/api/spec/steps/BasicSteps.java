@@ -1,10 +1,12 @@
-package amt.project2.gamification.api.spec.steps;
-/*
-import amt.project2.gamification.ApiException;
-import amt.project2.gamification.ApiResponse;
-import amt.project2.gamification.api.DefaultApi;
-import amt.project2.gamification.api.dto.Fruit;
-import amt.project2.gamification.api.spec.helpers.Environment;
+package io.avalia.fruits.api.spec.steps;
+
+import io.avalia.fruits.ApiException;
+import io.avalia.fruits.ApiResponse;
+import io.avalia.fruits.api.DefaultApi;
+import io.avalia.fruits.api.dto.Fruit;
+import io.avalia.fruits.api.dto.User;
+import io.avalia.fruits.api.dto.Registration;
+import io.avalia.fruits.api.spec.helpers.Environment;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -23,6 +25,8 @@ public class BasicSteps {
     private DefaultApi api;
 
     Fruit fruit;
+    User user;
+    Registration registration;
 
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
@@ -44,7 +48,7 @@ public class BasicSteps {
 
     @Given("I have a fruit payload")
     public void i_have_a_fruit_payload() throws Throwable {
-        fruit = new amt.project2.gamification.dto.Fruit()
+        fruit = new io.avalia.fruits.api.dto.Fruit()
           .kind("banana")
           .colour("yellow")
           .size("medium")
@@ -52,11 +56,28 @@ public class BasicSteps {
           .expirationDate(LocalDate.now())
           .expirationDateTime(OffsetDateTime.now());
     }
+    @Given("I have a registration payload")
+    public void i_have_a_registration_payload() throws Throwable {
+        registration = new io.avalia.fruits.api.dto.Registration()
+                .applicationName("banana")
+                .password("yellow");
+
+    }
 
     @When("^I POST the fruit payload to the /fruits endpoint$")
     public void i_POST_the_fruit_payload_to_the_fruits_endpoint() throws Throwable {
         try {
             lastApiResponse = api.createFruitWithHttpInfo(fruit);
+            processApiResponse(lastApiResponse);
+        } catch (ApiException e) {
+            processApiException(e);
+        }
+    }
+
+    @When("^I POST the registration payload to the /registrations endpoint$")
+    public void i_POST_the_registration_payload_to_the_registration_endpoint() throws Throwable {
+        try {
+            lastApiResponse = api.createRegistrationWithHttpInfo(registration);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);
@@ -72,6 +93,16 @@ public class BasicSteps {
     public void iSendAGETToTheFruitsEndpoint() {
         try {
             lastApiResponse = api.getFruitsWithHttpInfo();
+            processApiResponse(lastApiResponse);
+        } catch (ApiException e) {
+            processApiException(e);
+        }
+    }
+
+    @When("^I send a GET to the /registration endpoint$")
+    public void iSendAGETToTheRegistrationEndpoint() {
+        try {
+            lastApiResponse = api.getRegistrationWithHttpInfo();
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);
@@ -115,5 +146,13 @@ public class BasicSteps {
         lastStatusCode = lastApiException.getCode();
     }
 
+    @When("^I send a GET to the /users endpoint$")
+    public void iSendAGETToTheUsersEndpoint() {
+        try {
+            lastApiResponse = api.getUsersWithHttpInfo();
+            processApiResponse(lastApiResponse);
+        } catch (ApiException e) {
+            processApiException(e);
+        }
+    }
 }
-*/
