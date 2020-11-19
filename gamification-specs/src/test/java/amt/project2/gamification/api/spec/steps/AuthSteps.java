@@ -4,58 +4,60 @@ import amt.project2.gamification.api.spec.helpers.Environment;
 import amt.project2.gamification.ApiException;
 import amt.project2.gamification.ApiResponse;
 import amt.project2.gamification.api.DefaultApi;
-import amt.project2.gamification.api.dto.Event;
+import amt.project2.gamification.api.dto.Registration;
 import amt.project2.gamification.api.dto.Credentials;
 import amt.project2.gamification.api.dto.Token;
-
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.And;
 
-import java.time.OffsetDateTime;
+
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class EventsSteps {
+public class AuthSteps {
 
     private Environment environment;
     private DefaultApi api;
 
-    Event event;
+    Registration registration;
     Credentials credentials;
-    Token token;
 
-    private ApiResponse lastApiResponse;
+    private ApiResponse<Token> lastApiResponse;
     private ApiException lastApiException;
     private boolean lastApiCallThrewException;
     private int lastStatusCode;
 
     private String lastReceivedLocationHeader;
+    private Registration lastReceivedRegistration;
 
-    public EventsSteps(Environment environment) {
+    public AuthSteps(Environment environment) {
         this.environment = environment;
         this.api = environment.getApi();
     }
 
-    @Given("I have an event payload")
-    public void i_have_an_event_payload() {
-        event = new Event()
-                .type("application")
-                .userId("45247")
-                .timestamp(OffsetDateTime.now())
-                .properties(null);
+
+    @And("I have a correct authentication payload")
+    public void i_have_a_correct_authentication_payload() {
+        credentials = new Credentials()
+                .applicationName("application")
+                .password("pa$$w0rd");
     }
 
-    @When("I POST the event payload to the \\/events endpoint")
-    public void i_post_the_registration_payload_to_the_registrations_endpoint() {
+    @And("I have an incorrect authentication payload")
+    public void i_have_an_incorrect_authentication_payload() {
+        credentials = new Credentials()
+                .applicationName("notCorrectAtAll")
+                .password("pa$$w0rd");
+    }
+
+
+    @When("I POST the authentication payload to the \\/auth endpoint")
+    public void i_post_the_authentication_payload_to_the_auth_endpoint() {
         try {
-            credentials = new Credentials()
-                    .applicationName("application")
-                    .password("pa$$w0rd");
-            token = api.authenticateApplicationAndGetToken(credentials);
-            lastApiResponse = api.reportEventWithHttpInfo(token.toString(), event);
+            lastApiResponse = api.authenticateApplicationAndGetTokenWithHttpInfo(credentials);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);

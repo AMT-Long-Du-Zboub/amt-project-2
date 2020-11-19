@@ -1,7 +1,7 @@
 Feature: Basic operation on users
 
   Background:
-    Given there is a Fruits server
+    Given there is a Gamification server
 
     Scenario: get a user
       When I send a GET to the /users endpoint

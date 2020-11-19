@@ -1,10 +1,14 @@
 Feature: Basic operations on registrations
 
   Background:
-    Given there is a Fruits server
+    Given there is a Gamification server
 
-  Scenario: create an event
-    Given I have an event payload
+  Scenario: report an event
+    Given I have a registration payload
+    And I POST the registration payload to the /registrations endpoint
+    And I have a correct authentication payload
+    And I POST the authentication payload to the /auth endpoint
+    And I have an event payload
     When I POST the event payload to the /events endpoint
     Then I receive a 202 status code
 

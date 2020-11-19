@@ -1,9 +1,8 @@
 package amt.project2.gamification.api.spec.steps;
-/*
+
 import amt.project2.gamification.ApiException;
 import amt.project2.gamification.ApiResponse;
 import amt.project2.gamification.api.DefaultApi;
-import amt.project2.gamification.api.dto.Fruit;
 import amt.project2.gamification.api.spec.helpers.Environment;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -22,7 +21,7 @@ public class BasicSteps {
     private Environment environment;
     private DefaultApi api;
 
-    Fruit fruit;
+   // Fruit fruit;
 
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
@@ -30,19 +29,19 @@ public class BasicSteps {
     private int lastStatusCode;
 
     private String lastReceivedLocationHeader;
-    private Fruit lastReceivedFruit;
+   // private Fruit lastReceivedFruit;
 
     public BasicSteps(Environment environment) {
         this.environment = environment;
         this.api = environment.getApi();
     }
 
-    @Given("there is a Fruits server")
-    public void there_is_a_Fruits_server() throws Throwable {
+    @Given("there is a Gamification server")
+    public void there_is_a_Gamification_server() throws Throwable {
         assertNotNull(api);
     }
 
-    @Given("I have a fruit payload")
+    /*@Given("I have a fruit payload")
     public void i_have_a_fruit_payload() throws Throwable {
         fruit = new amt.project2.gamification.dto.Fruit()
           .kind("banana")
@@ -61,14 +60,14 @@ public class BasicSteps {
         } catch (ApiException e) {
             processApiException(e);
         }
-    }
+    }*/
 
     @Then("I receive a {int} status code")
     public void i_receive_a_status_code(int expectedStatusCode) throws Throwable {
         assertEquals(expectedStatusCode, lastStatusCode);
     }
 
-    @When("^I send a GET to the /fruits endpoint$")
+   /* @When("^I send a GET to the /fruits endpoint$")
     public void iSendAGETToTheFruitsEndpoint() {
         try {
             lastApiResponse = api.getFruitsWithHttpInfo();
@@ -76,13 +75,13 @@ public class BasicSteps {
         } catch (ApiException e) {
             processApiException(e);
         }
-    }
+    }*/
 
     @Then("I receive a {int} status code with a location header")
     public void iReceiveAStatusCodeWithALocationHeader(int arg0) {
     }
 
-    @When("I send a GET to the URL in the location header")
+ /*   @When("I send a GET to the URL in the location header")
     public void iSendAGETToTheURLInTheLocationHeader() {
         Integer id = Integer.parseInt(lastReceivedLocationHeader.substring(lastReceivedLocationHeader.lastIndexOf('/') + 1));
         try {
@@ -93,11 +92,11 @@ public class BasicSteps {
             processApiException(e);
         }
     }
-
-    @And("I receive a payload that is the same as the fruit payload")
+*/
+  /*  @And("I receive a payload that is the same as the fruit payload")
     public void iReceiveAPayloadThatIsTheSameAsTheFruitPayload() {
         assertEquals(fruit, lastReceivedFruit);
-    }
+    }*/
 
     private void processApiResponse(ApiResponse apiResponse) {
         lastApiResponse = apiResponse;
@@ -116,4 +115,4 @@ public class BasicSteps {
     }
 
 }
-*/
+

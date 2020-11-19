@@ -1,7 +1,7 @@
 Feature: Basic operations on registrations
 
   Background:
-    Given there is a Fruits server
+    Given there is a Gamification server
 
   Scenario: register an application
     Given I have a registration payload
