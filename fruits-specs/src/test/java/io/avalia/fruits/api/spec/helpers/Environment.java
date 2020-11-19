@@ -1,6 +1,6 @@
 package io.avalia.fruits.api.spec.helpers;
 
-import io.avalia.fruits.api.DefaultApi;
+import io.avalia.fruits.api.DefaultApiTest;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -8,7 +8,7 @@ import java.util.TimeZone;
 
 public class Environment {
 
-    private DefaultApi api = new DefaultApi();
+    private DefaultApiTest api = new DefaultApiTest();
 
     public Environment() throws IOException {
         Properties properties = new Properties();
@@ -18,7 +18,7 @@ public class Environment {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 
-    public DefaultApi getApi() {
+    public DefaultApiTest getApi() {
         return api;
     }
 
