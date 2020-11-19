@@ -34,7 +34,7 @@ paths:
         '201':
           description: Register a new application
 
-  /user/{id}:
+  /users/{id}:
     get:
       description: get user by id
       operationId: getUserId
@@ -52,7 +52,7 @@ paths:
             'application/json':
               schema:
                 $ref: '#/components/schemas/User'
-  /event/:
+  /events/:
     post:
       description: Report that a new event has append in the gamified application
       operationId: reportEvent
@@ -69,6 +69,24 @@ paths:
         '202':
           description: The platform has accepted the event and will process it
 
+  /auth:
+    post:
+      description: The info required to authentificate an application
+      operationId: authenticateApplicationAndGetToken
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: Authentification successful
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Token'
+        '401':
+          description: Authentification failed
 
   /fruits:
     post:
