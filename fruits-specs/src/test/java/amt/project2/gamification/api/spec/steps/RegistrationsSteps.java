@@ -1,10 +1,10 @@
 package amt.project2.gamification.api.spec.steps;
 
 import amt.project2.gamification.api.spec.helpers.Environment;
-import io.avalia.fruits.ApiException;
-import io.avalia.fruits.ApiResponse;
-import io.avalia.fruits.api.DefaultApi;
-import io.avalia.fruits.api.dto.Registration;
+import amt.project2.gamification.ApiException;
+import amt.project2.gamification.ApiResponse;
+import amt.project2.gamification.api.DefaultApi;
+import amt.project2.gamification.api.dto.Registration;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 
@@ -35,7 +35,7 @@ public class RegistrationsSteps {
 
     @Given("I have a registration payload")
     public void i_have_a_registration_payload() {
-        registration = new io.avalia.fruits.api.dto.Registration()
+        registration = new Registration()
                 .applicationName("application")
                 .password("pa$$w0rd");
     }

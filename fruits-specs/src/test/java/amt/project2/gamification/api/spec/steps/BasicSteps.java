@@ -1,9 +1,9 @@
 package amt.project2.gamification.api.spec.steps;
-
-import io.avalia.fruits.ApiException;
-import io.avalia.fruits.ApiResponse;
-import io.avalia.fruits.api.DefaultApi;
-import io.avalia.fruits.api.dto.Fruit;
+/*
+import amt.project2.gamification.ApiException;
+import amt.project2.gamification.ApiResponse;
+import amt.project2.gamification.api.DefaultApi;
+import amt.project2.gamification.api.dto.Fruit;
 import amt.project2.gamification.api.spec.helpers.Environment;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -44,7 +44,7 @@ public class BasicSteps {
 
     @Given("I have a fruit payload")
     public void i_have_a_fruit_payload() throws Throwable {
-        fruit = new io.avalia.fruits.api.dto.Fruit()
+        fruit = new amt.project2.gamification.dto.Fruit()
           .kind("banana")
           .colour("yellow")
           .size("medium")
@@ -116,3 +116,4 @@ public class BasicSteps {
     }
 
 }
+*/

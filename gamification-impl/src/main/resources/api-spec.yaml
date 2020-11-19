@@ -1,0 +1,208 @@
+openapi: '3.0.3'
+info:
+  version: '0.1.0'
+  title: Gamification API
+  description: An API to use concept in your app
+security:
+  #  - bearerAuth: []
+  - apiKeyAuth: []
+paths:
+  /registrations:
+    get:
+      description: list all registerd application
+      operationId: getApplications
+      responses:
+        '200':
+          description: list all registerd application
+          content:
+            'application/json':
+              schema:
+                title: Registration summary
+                type: array
+                items:
+                  $ref: '#/components/schemas/RegistrationSummary'
+
+    post:
+      description: Register a new application
+      operationId: addApplication
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Registration'
+      responses:
+        '201':
+          description: Register a new application
+
+  /badges:
+    get:
+      description: list of all badges of an application
+      operationId: getBadges
+      parameters:
+        - $ref: '#/components/parameters/TokenHeader'
+      responses:
+        '200':
+          description: list of all badges of an application
+          content:
+            'application/json':
+              schema:
+                title: Badges summary
+                type: array
+                items:
+                  $ref: '#/components/schemas/BadgeSummary'
+
+    post:
+      description: Register a new badge in an application
+      operationId: addBadge
+      parameters:
+        - $ref: '#/components/parameters/TokenHeader'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Badge'
+      responses:
+        '201':
+          description: Register a new badge in an application
+
+  /users/{id}:
+    get:
+      description: get user by id
+      operationId: getUserId
+      parameters:
+        - $ref: '#/components/parameters/TokenHeader'
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /events/:
+    post:
+      description: Report that a new event has append in the gamified application
+      operationId: reportEvent
+      parameters:
+        - $ref: '#/components/parameters/TokenHeader'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Event'
+
+      responses:
+        '202':
+          description: The platform has accepted the event and will process it
+
+  /auth:
+    post:
+      description: The info required to authentificate an application
+      operationId: authenticateApplicationAndGetToken
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: Authentification successful
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Token'
+        '401':
+          description: Authentification failed
+
+components:
+  securitySchemes:
+    #      bearerAuth:            # arbitrary name for the security scheme
+    #      type: http
+    #      scheme: bearer       # warning: it HAS TO be a lowercase b for the swagger ui version used in springfox
+    #      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+  schemas:
+
+    RegistrationSummary:
+      type: object
+      properties:
+        applicationName:
+          type: string
+
+    Registration:
+      type: object
+      properties:
+        applicationName:
+          type: string
+        password:
+          type: string
+
+    Credentials:
+      type: object
+      properties:
+        applicationName:
+          type: string
+        password:
+          type: string
+
+    Token:
+      type: object
+      properties:
+        applicationName:
+          type: string
+        password:
+          type: string
+
+    Event:
+      type: object
+      properties:
+        type:
+          type: string
+        userId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        properties:
+          type: object
+
+    User:
+      type: object
+      properties:
+        userId:
+          type: string
+        numberOfEvents:
+          type: integer
+
+    BadgeSummary:
+      type: object
+      properties:
+        name:
+          type: string
+
+    Badge:
+      type: object
+      properties:
+        name:
+          type: string
+        applicationName:
+          type: string
+        description:
+          type: string
+
+  parameters:
+    TokenHeader:
+      description: token that identifies the application sending the event
+      name: x-gamification-token
+      in: header
+      required: true
+      schema:
+        type: string

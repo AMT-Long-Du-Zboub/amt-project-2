@@ -1,6 +1,6 @@
 package amt.project2.gamification.api.spec.helpers;
 
-import io.avalia.fruits.api.DefaultApi;
+import amt.project2.gamification.api.DefaultApi;
 
 import java.io.IOException;
 import java.util.Properties;

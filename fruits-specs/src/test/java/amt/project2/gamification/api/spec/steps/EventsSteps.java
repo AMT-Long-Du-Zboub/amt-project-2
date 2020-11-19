@@ -1,10 +1,10 @@
 package amt.project2.gamification.api.spec.steps;
 
 import amt.project2.gamification.api.spec.helpers.Environment;
-import io.avalia.fruits.ApiException;
-import io.avalia.fruits.ApiResponse;
-import io.avalia.fruits.api.DefaultApi;
-import io.avalia.fruits.api.dto.Event;
+import amt.project2.gamification.ApiException;
+import amt.project2.gamification.ApiResponse;
+import amt.project2.gamification.api.DefaultApi;
+import amt.project2.gamification.api.dto.Event;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 
@@ -35,7 +35,7 @@ public class EventsSteps {
 
     @Given("I have an event payload")
     public void i_have_an_event_payload() {
-        event = new io.avalia.fruits.api.dto.Event()
+        event = new Event()
                 .type("application")
                 .userId("45247")
                 .timestamp(OffsetDateTime.now())
