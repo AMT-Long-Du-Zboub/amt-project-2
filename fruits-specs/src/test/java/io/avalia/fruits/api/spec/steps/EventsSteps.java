@@ -3,7 +3,7 @@ package io.avalia.fruits.api.spec.steps;
 import io.avalia.fruits.ApiException;
 import io.avalia.fruits.ApiResponse;
 import io.avalia.fruits.api.DefaultApi;
-import io.avalia.fruits.api.dto.Registration;
+import io.avalia.fruits.api.dto.Event;
 import io.avalia.fruits.api.spec.helpers.Environment;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -17,12 +17,12 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class RegistrationsSteps {
+public class EventsSteps {
 
     private Environment environment;
     private DefaultApi api;
 
-    Registration registration;
+    Event event;
 
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
@@ -30,40 +30,30 @@ public class RegistrationsSteps {
     private int lastStatusCode;
 
     private String lastReceivedLocationHeader;
-    private Registration lastReceivedRegistration;
 
-    public RegistrationsSteps(Environment environment) {
+    public EventsSteps(Environment environment) {
         this.environment = environment;
         this.api = environment.getApi();
     }
 
-    @Given("I have a registration payload")
-    public void i_have_a_registration_payload() {
-        registration = new io.avalia.fruits.api.dto.Registration()
-                .applicationName("application")
-                .password("pa$$w0rd");
+    @Given("I have an event payload")
+    public void i_have_an_event_payload() {
+        event = new io.avalia.fruits.api.dto.Event()
+                .type("application")
+                .userId("45247")
+                .timestamp(OffsetDateTime.now())
+                .properties(null);
     }
 
-    @When("I POST the registration payload to the \\/registrations endpoint")
+    @When("I POST the event payload to the \\/events endpoint")
     public void i_post_the_registration_payload_to_the_registrations_endpoint() {
         try {
-            lastApiResponse = api.addApplicationWithHttpInfo(registration);
+            lastApiResponse = api.reportEventWithHttpInfo("x-gamification-token", event);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);
         }
     }
-
-    @When("I send a GET to the \\/registrations endpoint")
-    public void i_send_a_get_to_the_registrations_endpoint() {
-        try {
-            lastApiResponse = api.getApplicationsWithHttpInfo();
-            processApiResponse(lastApiResponse);
-        } catch (ApiException e) {
-            processApiException(e);
-        }
-    }
-
 
 
     private void processApiResponse(ApiResponse apiResponse) {
