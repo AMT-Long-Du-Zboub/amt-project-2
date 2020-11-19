@@ -1,5 +1,6 @@
 package amt.project2.gamification.api.spec.helpers;
-import amt.project2.gamification.api.dto.DefaultApiTest;
+
+import amt.project2.gamification.api.DefaultApi;
 
 
 import java.io.IOException;
@@ -8,7 +9,7 @@ import java.util.TimeZone;
 
 public class Environment {
 
-    private DefaultApiTest api = new DefaultApiTest();
+    private DefaultApi api = new DefaultApi();
 
     public Environment() throws IOException {
         Properties properties = new Properties();
@@ -18,10 +19,7 @@ public class Environment {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 
-    public DefaultApiTest getApi() {
+    public DefaultApi getApi() {
         return api;
     }
-
-
-
 }
