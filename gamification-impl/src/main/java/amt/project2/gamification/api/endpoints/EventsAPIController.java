@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 
@@ -29,7 +30,8 @@ public class EventsAPIController implements EventsApi {
     public ResponseEntity reportEvent(@RequestHeader(value = "x-gamification-token") String xGamificationToken, @ApiParam(value = "", required = true) @Valid @RequestBody Event event) {
         String targetApplicationName = xGamificationToken;
         String targetEndUserId = event.getUserId();
-        ApplicationEntity targetApp = applicationRepository.findByName(targetApplicationName);
+        ApplicationEntity targetApp = applicationRepository.findByName(targetApplicationName)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         if(targetApp == null || targetEndUserId == null) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }

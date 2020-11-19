@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 
 
 @Controller
@@ -22,11 +23,12 @@ public class AuthAPIController implements AuthApi {
         String appName = credentials.getApplicationName();
         String password = credentials.getPassword();
 
-        ApplicationEntity targetApp = applicationRepository.findByName(appName);
+        ApplicationEntity targetApp = applicationRepository.findByName(appName)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if(targetApp != null && targetApp.getPassword().equals(password)) {
             Token token = new Token();
-            token.setApplicationName(targetApp.getName());
+            token.setApiKey(targetApp.getApiKey());
             return ResponseEntity.ok(token);
         }
         else {

@@ -1,6 +1,7 @@
 package amt.project2.gamification.api.endpoints;
 
 import amt.project2.gamification.entities.UserEntity;
+import amt.project2.gamification.repositories.ApplicationRepository;
 import amt.project2.gamification.repositories.UserRepository;
 import amt.project2.gamification.api.UsersApi;
 import amt.project2.gamification.api.dto.User;
@@ -18,8 +19,12 @@ public class UsersAPIController implements UsersApi {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    ApplicationRepository applicationRepository;
+
     public ResponseEntity<User> getUserId(@RequestHeader(value = "x-gamification-token") String xGamificationToken, @PathVariable("id") String userId) {
-        String targetAppName = xGamificationToken;
+        String targetAppName = applicationRepository.findByApiKey(xGamificationToken)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)).getName();
         if (userId == null){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }

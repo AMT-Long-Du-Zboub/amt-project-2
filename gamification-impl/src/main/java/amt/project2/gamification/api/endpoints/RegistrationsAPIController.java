@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Controller
@@ -47,6 +48,7 @@ public class RegistrationsAPIController implements RegistrationsApi {
     private ApplicationEntity toRegistrationEntity(Registration registration) {
         ApplicationEntity entity = new ApplicationEntity();
         entity.setName(registration.getApplicationName());
+        entity.setApiKey(UUID.randomUUID().toString());
         entity.setPassword(registration.getPassword());
         return entity;
     }

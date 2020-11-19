@@ -19,7 +19,7 @@ public class EventProcessor {
     @Transactional
     public void processEvent(ApplicationEntity applicationEntity, Event event) {
         UserEntity user = userRepository.findByApplicationEntityNameAndIdInGamifiedApplication(
-                applicationEntity.getName(),  event.getUserId()).orElse(null);
+                applicationEntity.getApiKey(),  event.getUserId()).orElse(null);
         if( user == null) {
             user = new UserEntity();
             user.setIdInGamifiedApplication( event.getUserId());

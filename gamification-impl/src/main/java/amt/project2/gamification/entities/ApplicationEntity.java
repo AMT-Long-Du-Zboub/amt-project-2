@@ -18,4 +18,5 @@ public class ApplicationEntity implements Serializable {
 
     private String name;
     private String password;
+    private String apiKey;
 }

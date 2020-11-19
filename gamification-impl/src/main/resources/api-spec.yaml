@@ -156,9 +156,7 @@ components:
     Token:
       type: object
       properties:
-        applicationName:
-          type: string
-        password:
+        apiKey:
           type: string
 
     Event:
@@ -192,8 +190,6 @@ components:
       type: object
       properties:
         name:
-          type: string
-        applicationName:
           type: string
         description:
           type: string

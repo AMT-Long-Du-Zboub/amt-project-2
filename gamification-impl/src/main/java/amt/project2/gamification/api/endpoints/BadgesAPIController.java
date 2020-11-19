@@ -4,6 +4,7 @@ import amt.project2.gamification.api.dto.Badge;
 import amt.project2.gamification.api.dto.BadgeSummary;
 import amt.project2.gamification.api.BadgesApi;
 import amt.project2.gamification.entities.BadgeEntity;
+import amt.project2.gamification.repositories.ApplicationRepository;
 import amt.project2.gamification.repositories.BadgeRepository;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -25,9 +27,15 @@ public class BadgesAPIController implements BadgesApi {
     @Autowired
     BadgeRepository badgeRepository;
 
+    @Autowired
+    ApplicationRepository applicationRepository;
+
+
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> addBadge(@RequestHeader(value = "x-gamification-token") String xGamificationToken, @ApiParam(value = "", required = true) @Valid @RequestBody Badge badge) {
-        BadgeEntity newBadgeEntity = toBadgeEntity(badge);
+        String targetAppName = applicationRepository.findByApiKey(xGamificationToken)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)).getName();
+        BadgeEntity newBadgeEntity = toBadgeEntity(targetAppName, badge);
 
         try {
             badgeRepository.save(newBadgeEntity);
@@ -40,7 +48,8 @@ public class BadgesAPIController implements BadgesApi {
 
     public ResponseEntity<List<BadgeSummary>> getBadges(@RequestHeader(value = "x-gamification-token") String xGamificationToken) {
         List<BadgeSummary> badges = new ArrayList<>();
-        String targetAppName = xGamificationToken;
+        String targetAppName = applicationRepository.findByApiKey(xGamificationToken)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)).getName();
 
         for (BadgeEntity badgeEntity : badgeRepository.findByApplicationName(targetAppName)) {
             badges.add(toBadge(badgeEntity));
@@ -48,10 +57,10 @@ public class BadgesAPIController implements BadgesApi {
         return ResponseEntity.ok(badges);
     }
 
-    private BadgeEntity toBadgeEntity(Badge badge) {
+    private BadgeEntity toBadgeEntity(String appName, Badge badge) {
         BadgeEntity entity = new BadgeEntity();
         entity.setName(badge.getName());
-        entity.setApplicationName(badge.getApplicationName());
+        entity.setApplicationName(appName);
         entity.setDescription(badge.getDescription());
         return entity;
     }

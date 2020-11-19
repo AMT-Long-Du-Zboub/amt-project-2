@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
-    Optional<UserEntity> findByApplicationEntityNameAndIdInGamifiedApplication(String registrationEntityName, String targetUser);
+    Optional<UserEntity> findByApplicationEntityNameAndIdInGamifiedApplication(String applicationName, String targetUser);
 }
