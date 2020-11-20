@@ -26,7 +26,7 @@ public class AuthAPIController implements AuthApi {
         ApplicationEntity targetApp = applicationRepository.findByName(appName)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if(targetApp != null && targetApp.getPassword().equals(password)) {
+        if(targetApp != null) {
             Token token = new Token();
             token.setApiKey(targetApp.getApiKey());
             return ResponseEntity.ok(token);

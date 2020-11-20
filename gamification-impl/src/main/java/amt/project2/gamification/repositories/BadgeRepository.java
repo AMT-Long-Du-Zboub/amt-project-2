@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Collection;
 
 public interface BadgeRepository extends CrudRepository<BadgeEntity, Long> {
-    Collection<BadgeEntity> findByApplicationName(String ApplicationEntityApiKey);
+    Collection<BadgeEntity> findByApplicationEntityName(String ApplicationEntityName);
 }

@@ -33,6 +33,10 @@ paths:
       responses:
         '201':
           description: Register a new application
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Token'
 
   /badges:
     get:

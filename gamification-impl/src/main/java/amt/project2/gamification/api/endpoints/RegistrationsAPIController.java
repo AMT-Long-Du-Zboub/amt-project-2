@@ -1,5 +1,6 @@
 package amt.project2.gamification.api.endpoints;
 
+import amt.project2.gamification.api.dto.Token;
 import amt.project2.gamification.entities.ApplicationEntity;
 import amt.project2.gamification.repositories.ApplicationRepository;
 import amt.project2.gamification.api.RegistrationsApi;
@@ -26,11 +27,14 @@ public class RegistrationsAPIController implements RegistrationsApi {
     ApplicationRepository applicationRepository;
 
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addApplication(@ApiParam(value = "", required = true) @Valid @RequestBody Registration registration) {
+    public ResponseEntity addApplication(@ApiParam(value = "", required = true) @Valid @RequestBody Registration registration) {
         ApplicationEntity newApplicationEntity = toRegistrationEntity(registration);
         try {
             applicationRepository.save(newApplicationEntity);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            Token token = new Token();
+            token.setApiKey(newApplicationEntity.getApiKey());
+            return ResponseEntity.ok(token);
+            //return ResponseEntity.status(HttpStatus.CREATED).build();
         }
         catch (DataIntegrityViolationException e){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
@@ -49,7 +53,6 @@ public class RegistrationsAPIController implements RegistrationsApi {
         ApplicationEntity entity = new ApplicationEntity();
         entity.setName(registration.getApplicationName());
         entity.setApiKey(UUID.randomUUID().toString());
-        entity.setPassword(registration.getPassword());
         return entity;
     }
 
