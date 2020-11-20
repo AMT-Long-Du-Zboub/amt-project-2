@@ -14,6 +14,7 @@ import io.cucumber.java.en.And;
 
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -31,8 +32,9 @@ public class AuthSteps {
     private boolean lastApiCallThrewException;
     private int lastStatusCode;
 
+    private String appName = "test";
+
     private String lastReceivedLocationHeader;
-    private Registration lastReceivedRegistration;
 
     public AuthSteps(Environment environment) {
         this.environment = environment;
@@ -43,7 +45,7 @@ public class AuthSteps {
     @And("I have a correct authentication payload")
     public void i_have_a_correct_authentication_payload() {
         credentials = new Credentials()
-                .applicationName("application")
+                .applicationName(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
                 .password("pa$$w0rd");
     }
 

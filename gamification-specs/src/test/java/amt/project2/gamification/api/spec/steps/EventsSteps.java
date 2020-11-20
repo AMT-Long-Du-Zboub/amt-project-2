@@ -43,8 +43,8 @@ public class EventsSteps {
     @Given("I have an event payload")
     public void i_have_an_event_payload() {
         event = new Event()
-                .type("application")
-                .userId("45247")
+                .type(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
+                .userId("1")
                 .timestamp(OffsetDateTime.now())
                 .properties(null);
     }
@@ -53,10 +53,10 @@ public class EventsSteps {
     public void i_post_the_registration_payload_to_the_registrations_endpoint() {
         try {
             credentials = new Credentials()
-                    .applicationName("application")
+                    .applicationName(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
                     .password("pa$$w0rd");
             token = api.authenticateApplicationAndGetToken(credentials);
-            lastApiResponse = api.reportEventWithHttpInfo(token.toString(), event);
+            lastApiResponse = api.reportEventWithHttpInfo(token.getApiKey(), event);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);

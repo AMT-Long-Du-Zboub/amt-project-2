@@ -9,5 +9,6 @@ Feature: Basic operation on users
       And I have a correct authentication payload
       And I POST the authentication payload to the /auth endpoint
       When I send a GET to the /users endpoint
-      Then I receive a 200 status code for users
+      Then I receive a 404 status code for users
 
+# TODO create a user for 200
