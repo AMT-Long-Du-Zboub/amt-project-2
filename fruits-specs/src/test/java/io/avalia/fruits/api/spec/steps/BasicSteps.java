@@ -2,8 +2,8 @@ package io.avalia.fruits.api.spec.steps;
 
 import io.avalia.fruits.ApiException;
 import io.avalia.fruits.ApiResponse;
-import io.avalia.fruits.api.DefaultApi;
-import io.avalia.fruits.api.dto.Fruit;
+import io.avalia.fruits.api.DefaultApiTest;
+import io.avalia.fruits.api.dto.FruitTest;
 import io.avalia.fruits.api.spec.helpers.Environment;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
