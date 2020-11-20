@@ -128,7 +128,7 @@ components:
     apiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-KEY
+      name: x-gamification-token
   schemas:
 
     RegistrationSummary:

@@ -47,10 +47,10 @@ public class BadgesSteps {
     public void i_post_the_badge_payload_to_the_badges_endpoint() {
        try {
             credentials = new Credentials()
-                    .applicationName("application")
+                    .applicationName(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
                     .password("pa$$w0rd");
             token = api.authenticateApplicationAndGetToken(credentials);
-            lastApiResponse = api.addBadgeWithHttpInfo(token.toString(), badge);
+            lastApiResponse = api.addBadgeWithHttpInfo(token.getApiKey(), badge);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);
@@ -82,10 +82,10 @@ public class BadgesSteps {
     public void i_send_a_get_to_the_badges_endpoint() {
         try {
             credentials = new Credentials()
-                    .applicationName("application")
+                    .applicationName(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
                     .password("pa$$w0rd");
             token = api.authenticateApplicationAndGetToken(credentials);
-            lastApiResponse = api.getBadgesWithHttpInfo(token.toString());
+            lastApiResponse = api.getBadgesWithHttpInfo(token.getApiKey());
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);

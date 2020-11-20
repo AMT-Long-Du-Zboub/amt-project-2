@@ -55,10 +55,10 @@ public class UsersSteps {
     public void i_send_a_get_to_the_users_endpoint() {
         try {
             credentials = new Credentials()
-                    .applicationName("application")
+                    .applicationName(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
                     .password("pa$$w0rd");
             token = api.authenticateApplicationAndGetToken(credentials);
-            lastApiResponse = api.getUserIdWithHttpInfo(token.toString(), "id");
+            lastApiResponse = api.getUserIdWithHttpInfo(token.getApiKey(), "id");
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);

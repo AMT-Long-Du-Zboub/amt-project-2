@@ -10,6 +10,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -27,7 +28,7 @@ public class RegistrationsSteps {
     private int lastStatusCode;
 
     private String lastReceivedLocationHeader;
-    private Registration lastReceivedRegistration;
+    public static Registration lastReceivedRegistration;
 
     public RegistrationsSteps(Environment environment) {
         this.environment = environment;
@@ -36,10 +37,12 @@ public class RegistrationsSteps {
 
     @Given("I have a registration payload")
     public void i_have_a_registration_payload() {
-        registration = new Registration()
-                .applicationName("application")
-                .password("pa$$w0rd");
-
+        if (lastReceivedRegistration == null) {
+            registration = new Registration()
+                    .applicationName(UUID.randomUUID().toString())
+                    .password("pa$$w0rd");
+            lastReceivedRegistration = registration;
+        }
     }
     @Then("I receive a {int} status code")
     public void i_receive_a_status_code(int expectedStatusCode) throws Throwable {
