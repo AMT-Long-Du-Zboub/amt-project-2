@@ -6,6 +6,7 @@ import amt.project2.gamification.ApiResponse;
 import amt.project2.gamification.api.DefaultApi;
 import amt.project2.gamification.api.dto.Registration;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import java.util.List;
@@ -38,6 +39,11 @@ public class RegistrationsSteps {
         registration = new Registration()
                 .applicationName("application")
                 .password("pa$$w0rd");
+
+    }
+    @Then("I receive a {int} status code")
+    public void i_receive_a_status_code(int expectedStatusCode) throws Throwable {
+        assertEquals(expectedStatusCode, lastStatusCode);
     }
 
     @When("I POST the registration payload to the \\/registrations endpoint")
@@ -59,8 +65,6 @@ public class RegistrationsSteps {
             processApiException(e);
         }
     }
-
-
 
     private void processApiResponse(ApiResponse apiResponse) {
         lastApiResponse = apiResponse;

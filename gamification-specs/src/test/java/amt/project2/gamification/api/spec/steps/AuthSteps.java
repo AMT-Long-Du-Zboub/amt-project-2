@@ -8,6 +8,7 @@ import amt.project2.gamification.api.dto.Registration;
 import amt.project2.gamification.api.dto.Credentials;
 import amt.project2.gamification.api.dto.Token;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.And;
 
@@ -52,8 +53,7 @@ public class AuthSteps {
                 .applicationName("notCorrectAtAll")
                 .password("pa$$w0rd");
     }
-
-
+    
     @When("I POST the authentication payload to the \\/auth endpoint")
     public void i_post_the_authentication_payload_to_the_auth_endpoint() {
         try {
@@ -63,6 +63,11 @@ public class AuthSteps {
             processApiException(e);
         }
     }
+    @Then("I receive a {int} status code for auth")
+    public void i_receive_a_status_code_for_auth(int expectedStatusCode) throws Throwable {
+        assertEquals(expectedStatusCode, lastStatusCode);
+    }
+
 
 
     private void processApiResponse(ApiResponse apiResponse) {

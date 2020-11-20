@@ -62,10 +62,7 @@ public class BasicSteps {
         }
     }*/
 
-    @Then("I receive a {int} status code")
-    public void i_receive_a_status_code(int expectedStatusCode) throws Throwable {
-        assertEquals(expectedStatusCode, lastStatusCode);
-    }
+
 
    /* @When("^I send a GET to the /fruits endpoint$")
     public void iSendAGETToTheFruitsEndpoint() {
@@ -80,6 +77,9 @@ public class BasicSteps {
     @Then("I receive a {int} status code with a location header")
     public void iReceiveAStatusCodeWithALocationHeader(int arg0) {
     }
+
+
+
 
  /*   @When("I send a GET to the URL in the location header")
     public void iSendAGETToTheURLInTheLocationHeader() {

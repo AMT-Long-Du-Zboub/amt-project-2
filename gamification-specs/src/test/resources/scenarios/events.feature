@@ -10,5 +10,5 @@ Feature: Basic operations on registrations
     And I POST the authentication payload to the /auth endpoint
     And I have an event payload
     When I POST the event payload to the /events endpoint
-    Then I receive a 202 status code
+    Then I receive a 202 status code for events
 

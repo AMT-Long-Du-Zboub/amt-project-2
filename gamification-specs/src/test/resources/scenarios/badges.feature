@@ -10,7 +10,7 @@ Feature: Basic operations on authentication
     And I POST the authentication payload to the /auth endpoint
     And I have a badge payload
     When I POST the badge payload to the /badges endpoint
-    Then I receive a 201 status code
+    Then I receive a 201 status code for badges
 
   Scenario: list badges of an application
     Given I have a registration payload
@@ -20,15 +20,15 @@ Feature: Basic operations on authentication
     And I have a badge payload
     And I POST the badge payload to the /badges endpoint
     When I send a GET to the /badges endpoint
-    Then I receive a 200 status code
+    Then I receive a 200 status code for badges
 
   Scenario: register a badge in a non existant application does not work
     Given I have a badge payload
     When I POST the badge payload to the /badges endpoint with wrong credentials
-    Then I receive a 401 status code
+    Then I receive a 404 status code for badges
 
   Scenario: list badges of a non registered application does not work
     Given I have a badge payload
     And I POST the badge payload to the /badges endpoint
     When I send a GET to the /badges endpoint with wrong credentials
-    Then I receive a 404 status code
+    Then I receive a 404 status code for badges

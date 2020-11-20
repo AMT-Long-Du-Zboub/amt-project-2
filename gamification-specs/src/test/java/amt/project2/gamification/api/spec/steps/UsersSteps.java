@@ -1,31 +1,33 @@
+
 package amt.project2.gamification.api.spec.steps;
 
 import amt.project2.gamification.api.spec.helpers.Environment;
 import amt.project2.gamification.ApiException;
 import amt.project2.gamification.ApiResponse;
 import amt.project2.gamification.api.DefaultApi;
-import amt.project2.gamification.api.dto.Event;
+import amt.project2.gamification.api.dto.Registration;
 import amt.project2.gamification.api.dto.Credentials;
 import amt.project2.gamification.api.dto.Token;
-
+import amt.project2.gamification.api.dto.Badge;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.And;
 
-import java.time.OffsetDateTime;
+
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class EventsSteps {
+public class UsersSteps {
 
     private Environment environment;
     private DefaultApi api;
 
-    Event event;
+    Registration registration;
     Credentials credentials;
+    Badge badge;
     Token token;
 
     private ApiResponse lastApiResponse;
@@ -34,39 +36,36 @@ public class EventsSteps {
     private int lastStatusCode;
 
     private String lastReceivedLocationHeader;
+    private Registration lastReceivedRegistration;
 
-    public EventsSteps(Environment environment) {
+    public UsersSteps(Environment environment) {
         this.environment = environment;
         this.api = environment.getApi();
     }
 
-    @Given("I have an event payload")
-    public void i_have_an_event_payload() {
-        event = new Event()
-                .type("application")
-                .userId("45247")
-                .timestamp(OffsetDateTime.now())
-                .properties(null);
+
+
+    @Then("I receive a {int} status code for users")
+    public void i_receive_a_status_code_for_users(int expectedStatusCode) throws Throwable {
+        assertEquals(expectedStatusCode, lastStatusCode);
     }
 
-    @When("I POST the event payload to the \\/events endpoint")
-    public void i_post_the_registration_payload_to_the_registrations_endpoint() {
+
+    @When("I send a GET to the /users endpoint")
+    public void i_send_a_get_to_the_users_endpoint() {
         try {
             credentials = new Credentials()
                     .applicationName("application")
                     .password("pa$$w0rd");
             token = api.authenticateApplicationAndGetToken(credentials);
-            lastApiResponse = api.reportEventWithHttpInfo(token.toString(), event);
+            lastApiResponse = api.getUserIdWithHttpInfo(token.toString(), "id");
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);
         }
     }
 
-    @Then("I receive a {int} status code for events")
-    public void i_receive_a_status_code_for_events(int expectedStatusCode) throws Throwable {
-        assertEquals(expectedStatusCode, lastStatusCode);
-    }
+
     private void processApiResponse(ApiResponse apiResponse) {
         lastApiResponse = apiResponse;
         lastApiCallThrewException = false;

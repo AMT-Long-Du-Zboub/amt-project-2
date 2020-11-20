@@ -10,6 +10,7 @@ import amt.project2.gamification.api.dto.Credentials;
 import amt.project2.gamification.api.dto.Token;
 import amt.project2.gamification.api.dto.Badge;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.And;
 
@@ -65,6 +66,10 @@ public class BadgesSteps {
         }
     }
 
+    @Then("I receive a {int} status code for badges")
+    public void i_receive_a_status_code_for_badges(int expectedStatusCode) throws Throwable {
+        assertEquals(expectedStatusCode, lastStatusCode);
+    }
 
     @Given("I have a badge payload")
     public void i_have_a_badge_payload() {
