@@ -69,6 +69,37 @@ paths:
         '201':
           description: Register a new badge in an application
 
+  /ladders:
+    get:
+      description: List of all level on a ladders of point
+      operationId: getLadders
+      parameters:
+        - $ref: '#/components/parameters/TokenHeader'
+      responses:
+        '200':
+          description: List of all level on a ladders of point
+          content:
+            'application/json':
+              schema:
+                title: Ladders summary
+                type: array
+                items:
+                  $ref: '#/components/schemas/LadderSummary'
+
+    post:
+      description: Register a new level of ladders in an application
+      operationId: addLadder
+      parameters:
+        - $ref: '#/components/parameters/TokenHeader'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Ladder'
+      responses:
+        '201':
+          description: Register a new level on the ladders
+
   /users/{id}:
     get:
       description: get user by id
@@ -197,6 +228,27 @@ components:
           type: string
         description:
           type: string
+
+    LadderSummary:
+      type: object
+      properties:
+        level:
+          type: integer
+        title:
+          type: string
+        nbrPoint:
+          type: integer
+
+    Ladder:
+      type: object
+      properties:
+        level:
+          type: integer
+        title:
+          type: string
+        nbrPoint:
+          type: integer
+
 
   parameters:
     TokenHeader:
