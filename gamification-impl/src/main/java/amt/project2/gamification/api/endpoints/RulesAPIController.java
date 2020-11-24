@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +30,13 @@ public class RulesAPIController implements RulesApi {
     @Autowired
     ApplicationRepository applicationRepository;
 
-    public ResponseEntity<List<RuleSummary>> getRules(@RequestHeader(value = "x-gamification-token") String xGamificationToken){
+    @Autowired
+    HttpServletRequest req;
+
+    public ResponseEntity<List<RuleSummary>> getRules(){
         List<RuleSummary> rules = new ArrayList<>();
 
-        ApplicationEntity targetApp = applicationRepository.findByApiKey(xGamificationToken)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
 
         for (RuleEntity ruleEntity : ruleRepository.findByApplicationEntityName(targetApp.getName())) {
             rules.add(toRule(ruleEntity));
@@ -41,9 +44,8 @@ public class RulesAPIController implements RulesApi {
         return ResponseEntity.ok(rules);
     }
 
-    public ResponseEntity addRule(@RequestHeader(value = "x-gamification-token") String xGamificationToken, @ApiParam(value = "", required = true) @Valid @RequestBody Rule rule){
-        ApplicationEntity targetApp = applicationRepository.findByApiKey(xGamificationToken)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public ResponseEntity addRule(@ApiParam(value = "", required = true) @Valid @RequestBody Rule rule){
+        ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
         RuleEntity newRuleEntity = toRuleEntity(targetApp, rule);
 
         try {

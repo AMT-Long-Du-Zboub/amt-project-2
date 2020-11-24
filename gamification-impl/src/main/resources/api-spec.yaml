@@ -131,8 +131,6 @@ paths:
     get:
       description: List of all rules of an application
       operationId: getRules
-      parameters:
-        - $ref: '#/components/parameters/TokenHeader'
       responses:
         '200':
           description: List of all rules of an application
@@ -147,8 +145,6 @@ paths:
     post:
       description: Register a new rule in an application
       operationId: addRule
-      parameters:
-        - $ref: '#/components/parameters/TokenHeader'
       requestBody:
         content:
           'application/json':
