@@ -115,8 +115,6 @@ paths:
     post:
       description: Report that a new event has append in the gamified application
       operationId: reportEvent
-      parameters:
-        - $ref: '#/components/parameters/TokenHeader'
       requestBody:
         content:
           'application/json':
