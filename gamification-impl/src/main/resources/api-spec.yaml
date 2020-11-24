@@ -97,7 +97,6 @@ paths:
       description: get user by id
       operationId: getUserId
       parameters:
-        - $ref: '#/components/parameters/TokenHeader'
         - in: path
           name: id
           schema:
@@ -110,6 +109,18 @@ paths:
             'application/json':
               schema:
                 $ref: '#/components/schemas/User'
+
+  /users/top10bypoint:
+    get:
+      description: List the top ten of the user by point
+      operationId: top10ByPoint
+      responses:
+        '200':
+          description: list of the top 10 user by point
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/TopTenByPoint'
 
   /events/:
     post:
@@ -229,8 +240,29 @@ components:
       properties:
         userId:
           type: string
-        numberOfEvents:
+        nbrPoint:
           type: integer
+        badges:
+          type: array
+          items:
+            $ref: '#/components/schemas/BadgeSummary'
+
+    UserPoint:
+      type: object
+      properties:
+        userId:
+          type: string
+        nbrPoint:
+          type: integer
+
+    TopTenByPoint:
+      type: object
+      properties:
+        lists:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserPoint'
+          maxItems: 10
 
     BadgeSummary:
       type: object

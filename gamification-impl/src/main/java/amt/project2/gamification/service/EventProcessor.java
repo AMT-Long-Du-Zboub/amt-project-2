@@ -39,6 +39,8 @@ public class EventProcessor {
             user.setIdInGamifiedApplication(event.getUserId());
             user.setApplicationEntity(applicationEntity);
             user.setNbrPoint(0);
+            LadderEntity defaultLadder = ladderRepository.findByApplicationEntityNameAndLevel(applicationEntity.getName(), 0).orElseThrow();
+            user.setActualLadder(defaultLadder);
             userRepository.save(user);
         }
 
@@ -53,8 +55,8 @@ public class EventProcessor {
         if (ruleEntity.getAwardPoint() != 0){
 
             user.addPoint(ruleEntity.getAwardPoint());
-            LadderEntity ladderEntity = ladderRepository.findByApplicationEntityNameAndLevel(applicationName, user.getActualLadder().getLevel() + 1).orElse(null);
 
+            LadderEntity ladderEntity = ladderRepository.findByApplicationEntityNameAndLevel(applicationName, user.getActualLadder().getLevel() + 1).orElse(null);
             if (ladderEntity != null && user.getNbrPoint() >= ladderEntity.getNbrPoint()){
                 user.setActualLadder(ladderEntity);
             }

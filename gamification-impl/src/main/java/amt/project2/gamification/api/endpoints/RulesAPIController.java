@@ -51,8 +51,7 @@ public class RulesAPIController implements RulesApi {
         try {
             ruleRepository.save(newRuleEntity);
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        }
-        catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
     }
