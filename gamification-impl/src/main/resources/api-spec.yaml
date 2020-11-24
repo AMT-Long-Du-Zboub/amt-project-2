@@ -69,8 +69,6 @@ paths:
     get:
       description: List of all level on a ladders of point
       operationId: getLadders
-      parameters:
-        - $ref: '#/components/parameters/TokenHeader'
       responses:
         '200':
           description: List of all level on a ladders of point
@@ -85,8 +83,6 @@ paths:
     post:
       description: Register a new level of ladders in an application
       operationId: addLadder
-      parameters:
-        - $ref: '#/components/parameters/TokenHeader'
       requestBody:
         content:
           'application/json':

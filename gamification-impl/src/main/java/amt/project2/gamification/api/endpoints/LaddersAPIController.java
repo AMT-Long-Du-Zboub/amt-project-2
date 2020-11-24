@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +31,13 @@ public class LaddersAPIController implements LaddersApi {
     @Autowired
     ApplicationRepository applicationRepository;
 
-    public ResponseEntity<List<LadderSummary>> getLadders(@RequestHeader(value = "x-gamification-token") String xGamificationToken){
+    @Autowired
+    HttpServletRequest req;
+
+    public ResponseEntity<List<LadderSummary>> getLadders(){
         List<LadderSummary> ladders = new ArrayList<>();
 
-        ApplicationEntity targetApp = applicationRepository.findByApiKey(xGamificationToken)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
 
         for (LadderEntity ladderEntity : ladderRepository.findByApplicationEntityName(targetApp.getName())) {
             ladders.add(toLadder(ladderEntity));
@@ -42,9 +45,8 @@ public class LaddersAPIController implements LaddersApi {
         return ResponseEntity.ok(ladders);
     }
 
-    public ResponseEntity addLadder(@RequestHeader(value = "x-gamification-token") String xGamificationToken, @ApiParam(value = "", required = true) @Valid @RequestBody Ladder ladder){
-        ApplicationEntity targetApp = applicationRepository.findByApiKey(xGamificationToken)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public ResponseEntity addLadder(@ApiParam(value = "", required = true) @Valid @RequestBody Ladder ladder){
+        ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
         LadderEntity newLadderEntity = toBadgeEntity(targetApp, ladder);
 
         try {
