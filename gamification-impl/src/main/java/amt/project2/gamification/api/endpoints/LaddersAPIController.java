@@ -45,11 +45,14 @@ public class LaddersAPIController implements LaddersApi {
     public ResponseEntity addLadder(@RequestHeader(value = "x-gamification-token") String xGamificationToken, @ApiParam(value = "", required = true) @Valid @RequestBody Ladder ladder){
         ApplicationEntity targetApp = applicationRepository.findByApiKey(xGamificationToken)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        LadderEntity newLadderEntity = toBadgeEntity(targetApp, ladder);
+        LadderEntity newLadderEntity = toLadderEntity(targetApp, ladder);
 
         try {
-            ladderRepository.save(newLadderEntity);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            if (ladderRepository.findByApplicationEntityNameAndLevel(targetApp.getName(), newLadderEntity.getLevel()).isEmpty()) {
+                ladderRepository.save(newLadderEntity);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            }
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
         catch (DataIntegrityViolationException e){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
@@ -64,7 +67,7 @@ public class LaddersAPIController implements LaddersApi {
         return ladder;
     }
 
-    private LadderEntity toBadgeEntity(ApplicationEntity targetApp, Ladder ladder) {
+    private LadderEntity toLadderEntity(ApplicationEntity targetApp, Ladder ladder) {
         LadderEntity entity = new LadderEntity();
 
         entity.setLevel(ladder.getLevel());

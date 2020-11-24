@@ -39,8 +39,11 @@ public class BadgesAPIController implements BadgesApi {
         BadgeEntity newBadgeEntity = toBadgeEntity(targetApp, badge);
 
         try {
-            badgeRepository.save(newBadgeEntity);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            if (badgeRepository.findByApplicationEntityNameAndName(targetApp.getName(), newBadgeEntity.getName()).isEmpty()) {
+                badgeRepository.save(newBadgeEntity);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            }
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
         catch (DataIntegrityViolationException e){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();

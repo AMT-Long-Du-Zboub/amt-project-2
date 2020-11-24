@@ -135,6 +135,37 @@ paths:
         '202':
           description: The platform has accepted the event and will process it
 
+  /rules:
+    get:
+      description: List of all rules of an application
+      operationId: getRules
+      parameters:
+        - $ref: '#/components/parameters/TokenHeader'
+      responses:
+        '200':
+          description: List of all rules of an application
+          content:
+            'application/json':
+              schema:
+                title: Rules summary
+                type: array
+                items:
+                  $ref: '#/components/schemas/RuleSummary'
+
+    post:
+      description: Register a new rule in an application
+      operationId: addRule
+      parameters:
+        - $ref: '#/components/parameters/TokenHeader'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Rule'
+      responses:
+        '201':
+          description: Register a new rule in an application
+
   /auth:
     post:
       description: The info required to authentificate an application
@@ -249,6 +280,25 @@ components:
         nbrPoint:
           type: integer
 
+    RuleSummary:
+      type: object
+      properties:
+        type:
+          type: string
+        awardBadge:
+          type: string
+        awardPoint:
+          type: integer
+
+    Rule:
+      type: object
+      properties:
+        type:
+          type: string
+        awardBadge:
+          type: string
+        awardPoint:
+          type: integer
 
   parameters:
     TokenHeader:
