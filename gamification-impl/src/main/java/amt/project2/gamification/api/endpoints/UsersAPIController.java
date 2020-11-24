@@ -1,5 +1,6 @@
 package amt.project2.gamification.api.endpoints;
 
+import amt.project2.gamification.entities.ApplicationEntity;
 import amt.project2.gamification.entities.UserEntity;
 import amt.project2.gamification.repositories.ApplicationRepository;
 import amt.project2.gamification.repositories.UserRepository;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class UsersAPIController implements UsersApi {
 
@@ -20,17 +23,18 @@ public class UsersAPIController implements UsersApi {
     UserRepository userRepository;
 
     @Autowired
-    ApplicationRepository applicationRepository;
+    HttpServletRequest req;
 
-    public ResponseEntity<User> getUserId(@RequestHeader(value = "x-gamification-token") String xGamificationToken, @PathVariable("id") String userId) {
-        String targetAppName = applicationRepository.findByApiKey(xGamificationToken)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)).getName();
+    public ResponseEntity<User> getUserId( @PathVariable("id") String userId) {
+
+        ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
+
         if (userId == null){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
 
         UserEntity userEntity = userRepository.findByApplicationEntityNameAndIdInGamifiedApplication(
-                targetAppName, userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                targetApp.getName(), userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return ResponseEntity.ok(toUser(userEntity));
     }
 

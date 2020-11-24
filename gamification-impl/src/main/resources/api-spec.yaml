@@ -42,8 +42,6 @@ paths:
     get:
       description: list of all badges of an application
       operationId: getBadges
-      parameters:
-        - $ref: '#/components/parameters/TokenHeader'
       responses:
         '200':
           description: list of all badges of an application
@@ -58,8 +56,6 @@ paths:
     post:
       description: Register a new badge in an application
       operationId: addBadge
-      parameters:
-        - $ref: '#/components/parameters/TokenHeader'
       requestBody:
         content:
           'application/json':
