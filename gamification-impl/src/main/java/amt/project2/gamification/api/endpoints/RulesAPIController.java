@@ -49,8 +49,16 @@ public class RulesAPIController implements RulesApi {
         RuleEntity newRuleEntity = toRuleEntity(targetApp, rule);
 
         try {
-            ruleRepository.save(newRuleEntity);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            RuleEntity toModifyRule = ruleRepository.findByApplicationEntityNameAndType(targetApp.getName(), newRuleEntity.getType()).orElse(null);
+            if (toModifyRule == null) {
+                ruleRepository.save(newRuleEntity);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            } else {
+                toModifyRule.setAwardBadge(newRuleEntity.getAwardBadge());
+                toModifyRule.setAwardPoint(newRuleEntity.getAwardPoint());
+                ruleRepository.save(toModifyRule);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            }
         } catch (DataIntegrityViolationException e){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }

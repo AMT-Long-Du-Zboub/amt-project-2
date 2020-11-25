@@ -48,11 +48,17 @@ public class LaddersAPIController implements LaddersApi {
         LadderEntity newLadderEntity = toLadderEntity(targetApp, ladder);
 
         try {
-            if (ladderRepository.findByApplicationEntityNameAndLevel(targetApp.getName(), newLadderEntity.getLevel()).isEmpty()) {
+            LadderEntity toModdifyLadder = ladderRepository.findByApplicationEntityNameAndLevel(targetApp.getName(), newLadderEntity.getLevel()).orElse(null);
+
+            if (toModdifyLadder == null) {
                 ladderRepository.save(newLadderEntity);
                 return ResponseEntity.status(HttpStatus.CREATED).build();
+            } else {
+                toModdifyLadder.setTitle(newLadderEntity.getTitle());
+                toModdifyLadder.setNbrPoint(newLadderEntity.getNbrPoint());
+                ladderRepository.save(toModdifyLadder);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
             }
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
         catch (DataIntegrityViolationException e){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();

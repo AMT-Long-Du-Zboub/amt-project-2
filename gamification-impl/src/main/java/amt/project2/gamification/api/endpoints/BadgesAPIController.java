@@ -40,11 +40,15 @@ public class BadgesAPIController implements BadgesApi {
         BadgeEntity newBadgeEntity = toBadgeEntity(targetApp, badge);
 
         try {
-            if (badgeRepository.findByApplicationEntityNameAndName(targetApp.getName(), newBadgeEntity.getName()).isEmpty()) {
+            BadgeEntity toModifyBadge = badgeRepository.findByApplicationEntityNameAndName(targetApp.getName(), newBadgeEntity.getName()).orElse(null);
+            if (toModifyBadge == null) {
                 badgeRepository.save(newBadgeEntity);
                 return ResponseEntity.status(HttpStatus.CREATED).build();
+            } else {
+                toModifyBadge.setDescription(newBadgeEntity.getDescription());
+                badgeRepository.save(toModifyBadge);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
             }
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
         catch (DataIntegrityViolationException e){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
@@ -71,7 +75,8 @@ public class BadgesAPIController implements BadgesApi {
 
     private BadgeSummary toBadge(BadgeEntity entity) {
         BadgeSummary badge = new BadgeSummary();
-        badge.name(entity.getName());
+        badge.setName(entity.getName());
+        badge.setDescription(entity.getDescription());
         return badge;
     }
 

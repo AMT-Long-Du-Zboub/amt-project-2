@@ -1,6 +1,7 @@
 package amt.project2.gamification.entities;
 
 import amt.project2.gamification.api.dto.BadgeSummary;
+import amt.project2.gamification.api.dto.LadderSummary;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,6 +25,9 @@ public class UserEntity implements Serializable {
     @ManyToMany
     private Set<BadgeEntity> badges = new HashSet<>();
 
+    @OneToMany
+    private Set<HistoryPointEntity> historyPointEntity;
+
     private String idInGamifiedApplication;
 
     private int nbrPoint;
@@ -46,5 +50,14 @@ public class UserEntity implements Serializable {
         }
 
         return badgesList;
+    }
+
+    public LadderSummary getLadderSummary(){
+        LadderSummary ladderSummary = new LadderSummary();
+        ladderSummary.setLevel(actualLadder.getLevel());
+        ladderSummary.setNbrPoint(actualLadder.getNbrPoint());
+        ladderSummary.setTitle(actualLadder.getTitle());
+
+        return ladderSummary;
     }
 }

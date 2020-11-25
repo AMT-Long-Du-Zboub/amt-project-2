@@ -110,6 +110,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
 
+  /users/{id}/historyPoint:
+    get:
+      description: get history of an user by id
+      operationId: getHistoryByUserId
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/HistoryOfPointForAnUser'
+
+
   /users/top10bypoint:
     get:
       description: List the top ten of the user by point
@@ -240,8 +259,10 @@ components:
       properties:
         userId:
           type: string
-        nbrPoint:
+        nbrPointOfUser:
           type: integer
+        LadderOfUser:
+          $ref: '#/components/schemas/LadderSummary'
         badges:
           type: array
           items:
@@ -254,6 +275,8 @@ components:
           type: string
         nbrPoint:
           type: integer
+        level:
+          type: integer
 
     TopTenByPoint:
       type: object
@@ -264,10 +287,30 @@ components:
             $ref: '#/components/schemas/UserPoint'
           maxItems: 10
 
+    HistoryOfPoint:
+      type: object
+      properties:
+        date:
+          type: string
+        pointAwarded:
+          type: integer
+        totalAfter:
+          type: integer
+
+    HistoryOfPointForAnUser:
+      type: object
+      properties:
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoryOfPoint'
+
     BadgeSummary:
       type: object
       properties:
         name:
+          type: string
+        description:
           type: string
 
     Badge:

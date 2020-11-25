@@ -4,18 +4,24 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Data
-public class BadgeEntity implements Serializable {
+public class HistoryPointEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
+    private UserEntity userEntity;
+
+    @ManyToOne
     private ApplicationEntity applicationEntity;
 
-    private String name;
+    private int pointAwarded;
 
-    private String description;
+    private int totalOfPointAfterAwarded;
+
+    private String whenPointAwarded;
 }

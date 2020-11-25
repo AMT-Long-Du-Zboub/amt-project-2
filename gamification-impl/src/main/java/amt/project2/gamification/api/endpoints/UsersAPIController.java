@@ -1,12 +1,12 @@
 package amt.project2.gamification.api.endpoints;
 
-import amt.project2.gamification.api.dto.TopTenByPoint;
-import amt.project2.gamification.api.dto.UserPoint;
+import amt.project2.gamification.api.dto.*;
 import amt.project2.gamification.entities.ApplicationEntity;
+import amt.project2.gamification.entities.HistoryPointEntity;
 import amt.project2.gamification.entities.UserEntity;
+import amt.project2.gamification.repositories.HistoryPointRepository;
 import amt.project2.gamification.repositories.UserRepository;
 import amt.project2.gamification.api.UsersApi;
-import amt.project2.gamification.api.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +22,9 @@ public class UsersAPIController implements UsersApi {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    HistoryPointRepository historyPointRepository;
 
     @Autowired
     HttpServletRequest req;
@@ -42,7 +45,8 @@ public class UsersAPIController implements UsersApi {
     private User toUser(UserEntity entity) {
         User user = new User();
         user.setUserId(entity.getIdInGamifiedApplication());
-        user.setNbrPoint(entity.getNbrPoint());
+        user.setNbrPointOfUser(entity.getNbrPoint());
+        user.setLadderOfUser(entity.getLadderSummary());
         user.setBadges(entity.getBadgesSummary());
         return user;
     }
@@ -64,9 +68,34 @@ public class UsersAPIController implements UsersApi {
             UserPoint userPoint = new UserPoint();
             userPoint.setUserId(user.getIdInGamifiedApplication());
             userPoint.setNbrPoint(user.getNbrPoint());
+            userPoint.setLevel(user.getLadderSummary().getLevel());
             topTenByPoint.addListsItem(userPoint);
         }
 
         return topTenByPoint;
+    }
+
+    public ResponseEntity<HistoryOfPointForAnUser> getHistoryByUserId(@PathVariable("id") String userId){
+        ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
+
+        Collection<HistoryPointEntity> historyOfUser = historyPointRepository
+                .findByApplicationEntityNameAndUserEntityIdInGamifiedApplicationOrderByWhenPointAwardedAsc(targetApp.getName(), userId);
+
+        HistoryOfPointForAnUser history = provideHistoryOfPoint(historyOfUser);
+        return ResponseEntity.ok(history);
+    }
+
+    public HistoryOfPointForAnUser provideHistoryOfPoint(Collection<HistoryPointEntity> historyOfUser){
+        HistoryOfPointForAnUser history = new HistoryOfPointForAnUser();
+        for (HistoryPointEntity entity: historyOfUser) {
+            HistoryOfPoint historyOfPoint = new HistoryOfPoint();
+
+            historyOfPoint.setDate(entity.getWhenPointAwarded());
+            historyOfPoint.setPointAwarded(entity.getPointAwarded());
+            historyOfPoint.setTotalAfter(entity.getTotalOfPointAfterAwarded());
+
+            history.addHistoryItem(historyOfPoint);
+        }
+        return history;
     }
 }
