@@ -45,3 +45,15 @@ mvn clean test
 ```
 You will see the test results in the console, but you can also open the file located in `./target/cucumber`
 
+# Database link
+
+Ensure that `gamification-impl/src/main/resources/application.properties` has these lines set:
+
+```
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.datasource.url=jdbc:mysql://${MYSQL_HOST:localhost}:3306/amt2
+spring.datasource.username=root
+spring.datasource.password=amt2
+```
+
+and that a database on port 3306 of either `localhost` or `MYSQL_HOST` is available for R/W access to user root with pass amt2 on database amt2.
