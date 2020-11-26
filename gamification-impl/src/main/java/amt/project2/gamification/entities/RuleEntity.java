@@ -7,7 +7,8 @@ import java.io.Serializable;
 
 @Entity
 @Data
-public class BadgeEntity implements Serializable {
+public class RuleEntity implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -15,7 +16,9 @@ public class BadgeEntity implements Serializable {
     @ManyToOne
     private ApplicationEntity applicationEntity;
 
-    private String name;
+    private String type;
 
-    private String description;
+    private String awardBadge;
+
+    private int awardPoint;
 }

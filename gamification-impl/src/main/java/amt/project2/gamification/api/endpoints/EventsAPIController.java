@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 
@@ -26,12 +27,13 @@ public class EventsAPIController implements EventsApi {
     @Autowired
     ApplicationRepository applicationRepository;
 
+    @Autowired
+    HttpServletRequest req;
+
     @Override
-    public ResponseEntity reportEvent(@RequestHeader(value = "x-gamification-token") String xGamificationToken, @ApiParam(value = "", required = true) @Valid @RequestBody Event event) {
-        String targetApplicationName = xGamificationToken;
+    public ResponseEntity reportEvent(@ApiParam(value = "", required = true) @Valid @RequestBody Event event) {
         String targetEndUserId = event.getUserId();
-        ApplicationEntity targetApp = applicationRepository.findByName(targetApplicationName)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
         if(targetApp == null || targetEndUserId == null) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }

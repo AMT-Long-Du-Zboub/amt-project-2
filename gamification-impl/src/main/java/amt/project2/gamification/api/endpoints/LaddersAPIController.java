@@ -14,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -47,11 +45,20 @@ public class LaddersAPIController implements LaddersApi {
 
     public ResponseEntity addLadder(@ApiParam(value = "", required = true) @Valid @RequestBody Ladder ladder){
         ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
-        LadderEntity newLadderEntity = toBadgeEntity(targetApp, ladder);
+        LadderEntity newLadderEntity = toLadderEntity(targetApp, ladder);
 
         try {
-            ladderRepository.save(newLadderEntity);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            LadderEntity toModdifyLadder = ladderRepository.findByApplicationEntityNameAndLevel(targetApp.getName(), newLadderEntity.getLevel()).orElse(null);
+
+            if (toModdifyLadder == null) {
+                ladderRepository.save(newLadderEntity);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            } else {
+                toModdifyLadder.setTitle(newLadderEntity.getTitle());
+                toModdifyLadder.setNbrPoint(newLadderEntity.getNbrPoint());
+                ladderRepository.save(toModdifyLadder);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            }
         }
         catch (DataIntegrityViolationException e){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
@@ -66,7 +73,7 @@ public class LaddersAPIController implements LaddersApi {
         return ladder;
     }
 
-    private LadderEntity toBadgeEntity(ApplicationEntity targetApp, Ladder ladder) {
+    private LadderEntity toLadderEntity(ApplicationEntity targetApp, Ladder ladder) {
         LadderEntity entity = new LadderEntity();
 
         entity.setLevel(ladder.getLevel());

@@ -89,19 +89,19 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Repo local
+        <!-- Repo local -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
-        -->
-        <!--  -->
+
+        <!-- MySql
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-
+        -->
         <!--SpringFox dependencies -->
         <dependency>
             <groupId>io.springfox</groupId>
