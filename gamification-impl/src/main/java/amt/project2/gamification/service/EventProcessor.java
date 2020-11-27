@@ -77,7 +77,7 @@ public class EventProcessor {
     }
 
     private void addInHistoryPoint(UserEntity user, ApplicationEntity applicationEntity, int nbrPoint, int TotalAfterAdd){
-        SimpleDateFormat formatter= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
 
         HistoryPointEntity historyPointEntity = new HistoryPointEntity();
