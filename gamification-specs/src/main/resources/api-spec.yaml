@@ -33,13 +33,15 @@ paths:
       responses:
         '201':
           description: Register a new application
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Token'
 
   /badges:
     get:
       description: list of all badges of an application
       operationId: getBadges
-      parameters:
-        - $ref: '#/components/parameters/TokenHeader'
       responses:
         '200':
           description: list of all badges of an application
@@ -54,8 +56,6 @@ paths:
     post:
       description: Register a new badge in an application
       operationId: addBadge
-      parameters:
-        - $ref: '#/components/parameters/TokenHeader'
       requestBody:
         content:
           'application/json':
@@ -65,12 +65,38 @@ paths:
         '201':
           description: Register a new badge in an application
 
+  /ladders:
+    get:
+      description: List of all level on a ladders of point
+      operationId: getLadders
+      responses:
+        '200':
+          description: List of all level on a ladders of point
+          content:
+            'application/json':
+              schema:
+                title: Ladders summary
+                type: array
+                items:
+                  $ref: '#/components/schemas/LadderSummary'
+
+    post:
+      description: Register a new level of ladders in an application
+      operationId: addLadder
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Ladder'
+      responses:
+        '201':
+          description: Register a new level on the ladders
+
   /users/{id}:
     get:
       description: get user by id
       operationId: getUserId
       parameters:
-        - $ref: '#/components/parameters/TokenHeader'
         - in: path
           name: id
           schema:
@@ -84,12 +110,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
 
+  /users/{id}/historyPoint:
+    get:
+      description: get history of an user by id
+      operationId: getHistoryByUserId
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/HistoryOfPointForAnUser'
+
+
+  /users/top10bypoint:
+    get:
+      description: List the top ten of the user by point
+      operationId: top10ByPoint
+      responses:
+        '200':
+          description: list of the top 10 user by point
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/TopTenByPoint'
+
   /events/:
     post:
       description: Report that a new event has append in the gamified application
       operationId: reportEvent
-      parameters:
-        - $ref: '#/components/parameters/TokenHeader'
       requestBody:
         content:
           'application/json':
@@ -99,6 +154,33 @@ paths:
       responses:
         '202':
           description: The platform has accepted the event and will process it
+
+  /rules:
+    get:
+      description: List of all rules of an application
+      operationId: getRules
+      responses:
+        '200':
+          description: List of all rules of an application
+          content:
+            'application/json':
+              schema:
+                title: Rules summary
+                type: array
+                items:
+                  $ref: '#/components/schemas/RuleSummary'
+
+    post:
+      description: Register a new rule in an application
+      operationId: addRule
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Rule'
+      responses:
+        '201':
+          description: Register a new rule in an application
 
   /auth:
     post:
@@ -128,7 +210,7 @@ components:
     apiKeyAuth:
       type: apiKey
       in: header
-      name: x-gamification-token
+      name: X-API-KEY
   schemas:
 
     RegistrationSummary:
@@ -177,13 +259,58 @@ components:
       properties:
         userId:
           type: string
-        numberOfEvents:
+        nbrPointOfUser:
           type: integer
+        LadderOfUser:
+          $ref: '#/components/schemas/LadderSummary'
+        badges:
+          type: array
+          items:
+            $ref: '#/components/schemas/BadgeSummary'
+
+    UserPoint:
+      type: object
+      properties:
+        userId:
+          type: string
+        nbrPoint:
+          type: integer
+        level:
+          type: integer
+
+    TopTenByPoint:
+      type: object
+      properties:
+        lists:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserPoint'
+          maxItems: 10
+
+    HistoryOfPoint:
+      type: object
+      properties:
+        date:
+          type: string
+        pointAwarded:
+          type: integer
+        totalAfter:
+          type: integer
+
+    HistoryOfPointForAnUser:
+      type: object
+      properties:
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoryOfPoint'
 
     BadgeSummary:
       type: object
       properties:
         name:
+          type: string
+        description:
           type: string
 
     Badge:
@@ -194,10 +321,50 @@ components:
         description:
           type: string
 
+    LadderSummary:
+      type: object
+      properties:
+        level:
+          type: integer
+        title:
+          type: string
+        nbrPoint:
+          type: integer
+
+    Ladder:
+      type: object
+      properties:
+        level:
+          type: integer
+        title:
+          type: string
+        nbrPoint:
+          type: integer
+
+    RuleSummary:
+      type: object
+      properties:
+        type:
+          type: string
+        awardBadge:
+          type: string
+        awardPoint:
+          type: integer
+
+    Rule:
+      type: object
+      properties:
+        type:
+          type: string
+        awardBadge:
+          type: string
+        awardPoint:
+          type: integer
+
   parameters:
     TokenHeader:
       description: token that identifies the application sending the event
-      name: x-gamification-token
+      name: X-API-KEY
       in: header
       required: true
       schema:

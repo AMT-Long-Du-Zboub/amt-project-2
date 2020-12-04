@@ -31,6 +31,7 @@ public class AuthSteps {
     private ApiException lastApiException;
     private boolean lastApiCallThrewException;
     private int lastStatusCode;
+    public static Token apiKey;
 
     private String appName = "test";
 
@@ -60,6 +61,9 @@ public class AuthSteps {
     public void i_post_the_authentication_payload_to_the_auth_endpoint() {
         try {
             lastApiResponse = api.authenticateApplicationAndGetTokenWithHttpInfo(credentials);
+            apiKey = (Token) lastApiResponse.getData();
+            // api.getApiClient().setApiKey(apiKey.getApiKey());
+            api.getApiClient().addDefaultHeader("X-API-KEY", apiKey.getApiKey());
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);

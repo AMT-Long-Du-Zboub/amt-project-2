@@ -16,6 +16,7 @@ import io.cucumber.java.en.And;
 
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -58,7 +59,7 @@ public class UsersSteps {
                     .applicationName(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
                     .password("pa$$w0rd");
             token = api.authenticateApplicationAndGetToken(credentials);
-            lastApiResponse = api.getUserIdWithHttpInfo(token.getApiKey(), "id");
+            lastApiResponse = api.getUserIdWithHttpInfo(UUID.randomUUID().toString());
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);

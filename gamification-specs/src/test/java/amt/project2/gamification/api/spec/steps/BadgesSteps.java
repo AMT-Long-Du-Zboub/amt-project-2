@@ -50,7 +50,7 @@ public class BadgesSteps {
                     .applicationName(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
                     .password("pa$$w0rd");
             token = api.authenticateApplicationAndGetToken(credentials);
-            lastApiResponse = api.addBadgeWithHttpInfo(token.getApiKey(), badge);
+            lastApiResponse = api.addBadgeWithHttpInfo(badge);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);
@@ -59,7 +59,7 @@ public class BadgesSteps {
     @When("I POST the badge payload to the \\/badges endpoint with wrong credentials")
     public void i_post_the_badge_payload_to_the_badges_with_wrong_credentials_endpoint() {
         try {
-            lastApiResponse = api.addBadgeWithHttpInfo("wrongCreds", badge);
+            lastApiResponse = api.addBadgeWithHttpInfo( badge);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);
@@ -85,7 +85,7 @@ public class BadgesSteps {
                     .applicationName(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
                     .password("pa$$w0rd");
             token = api.authenticateApplicationAndGetToken(credentials);
-            lastApiResponse = api.getBadgesWithHttpInfo(token.getApiKey());
+            lastApiResponse = api.addBadgeWithHttpInfo(badge);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);
@@ -95,7 +95,7 @@ public class BadgesSteps {
     @When("I send a GET to the /badges endpoint with wrong credentials")
     public void i_send_a_get_to_the_badges_with_wrong_credentials_endpoint()  {
         try {
-            lastApiResponse = api.getBadgesWithHttpInfo("wrongCreds");
+            lastApiResponse = api.addBadgeWithHttpInfo(badge);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);

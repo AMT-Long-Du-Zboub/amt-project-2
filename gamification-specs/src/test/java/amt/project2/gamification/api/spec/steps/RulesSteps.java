@@ -1,33 +1,28 @@
 package amt.project2.gamification.api.spec.steps;
 
-import amt.project2.gamification.api.spec.helpers.Environment;
-
 import amt.project2.gamification.ApiException;
 import amt.project2.gamification.ApiResponse;
 import amt.project2.gamification.api.DefaultApi;
-import amt.project2.gamification.api.dto.Event;
 import amt.project2.gamification.api.dto.Credentials;
+import amt.project2.gamification.api.dto.Event;
+import amt.project2.gamification.api.dto.Rule;
 import amt.project2.gamification.api.dto.Token;
-
+import amt.project2.gamification.api.spec.helpers.Environment;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.en.And;
 
-import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
-public class EventsSteps {
-
+public class RulesSteps {
     private Environment environment;
     private DefaultApi api;
 
-    Event event;
-    Credentials credentials;
-    Token token;
+
+    Rule rule;
 
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
@@ -36,36 +31,41 @@ public class EventsSteps {
 
     private String lastReceivedLocationHeader;
 
-    public EventsSteps(Environment environment) {
+    public  RulesSteps(Environment environment) {
         this.environment = environment;
         this.api = environment.getApi();
     }
 
-    @Given("I have an event payload")
-    public void i_have_an_event_payload() {
-        event = new Event()
-                .type(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
-                .userId("1")
-                .timestamp(OffsetDateTime.now())
-                .properties(null);
+    @Given("I have a rule payload")
+    public void iHaveARulePayload() {
+        rule = new Rule()
+                .type(UUID.randomUUID().toString())
+                .awardPoint(0)
+                .awardBadge(UUID.randomUUID().toString());
+        
     }
 
-    @When("I POST the event payload to the \\/events endpoint")
-    public void i_post_the_registration_payload_to_the_registrations_endpoint() {
+    @When("I POST the rule payload to the \\/rules endpoint")
+    public void iPOSTTheRulePayloadToTheRulesEndpoint() {
         try {
-            credentials = new Credentials()
-                    .applicationName(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
-                    .password("pa$$w0rd");
-            token = api.authenticateApplicationAndGetToken(credentials);
-            lastApiResponse = api.reportEventWithHttpInfo(event);
+            lastApiResponse = api.addRuleWithHttpInfo(rule);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);
         }
     }
 
-    @Then("I receive a {int} status code for events")
-    public void i_receive_a_status_code_for_events(int expectedStatusCode) throws Throwable {
+    @When("I send a GET to the \\/rules endpoint")
+    public void iSendAGETToTheRulesEndpoint() {
+        try {
+            lastApiResponse = api.getRulesWithHttpInfo();
+            processApiResponse(lastApiResponse);
+        } catch (ApiException e) {
+            processApiException(e);
+        }
+    }
+    @Then("I receive a {int} status code for rules")
+    public void i_receive_a_status_code_for_rules(int expectedStatusCode) throws Throwable {
         assertEquals(expectedStatusCode, lastStatusCode);
     }
     private void processApiResponse(ApiResponse apiResponse) {
@@ -83,5 +83,6 @@ public class EventsSteps {
         lastApiException = apiException;
         lastStatusCode = lastApiException.getCode();
     }
+
 
 }

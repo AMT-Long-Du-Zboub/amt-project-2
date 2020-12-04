@@ -364,7 +364,7 @@ components:
   parameters:
     TokenHeader:
       description: token that identifies the application sending the event
-      name: x-gamification-token
+      name: X-API-KEY
       in: header
       required: true
       schema:

@@ -1,4 +1,4 @@
-Feature: Basic operations on authentication
+Feature: Basic operations on badges
 
   Background:
     Given there is a Gamification server
