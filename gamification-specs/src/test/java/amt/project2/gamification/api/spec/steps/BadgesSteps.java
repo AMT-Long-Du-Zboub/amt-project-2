@@ -34,6 +34,8 @@ public class BadgesSteps {
     private ApiException lastApiException;
     private boolean lastApiCallThrewException;
     private int lastStatusCode;
+    public static Token apiKey;
+
 
     private String lastReceivedLocationHeader;
     private Registration lastReceivedRegistration;
@@ -43,7 +45,7 @@ public class BadgesSteps {
         this.api = environment.getApi();
     }
 
-    @When("I POST the badge payload to the \\/badges endpoint")
+    @When("I POST the badge payload to the /badges endpoint")
     public void i_post_the_badge_payload_to_the_badges_endpoint() {
        try {
             credentials = new Credentials()
@@ -81,11 +83,8 @@ public class BadgesSteps {
     @When("I send a GET to the /badges endpoint")
     public void i_send_a_get_to_the_badges_endpoint() {
         try {
-            credentials = new Credentials()
-                    .applicationName(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
-                    .password("pa$$w0rd");
-            token = api.authenticateApplicationAndGetToken(credentials);
-            lastApiResponse = api.addBadgeWithHttpInfo(badge);
+
+            lastApiResponse = api.getBadgesWithHttpInfo();
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);

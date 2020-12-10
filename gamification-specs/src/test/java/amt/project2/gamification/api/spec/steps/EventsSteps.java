@@ -16,6 +16,7 @@ import io.cucumber.java.en.And;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -45,18 +46,15 @@ public class EventsSteps {
     public void i_have_an_event_payload() {
         event = new Event()
                 .type(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
-                .userId("1")
+                .userId(UUID.randomUUID().toString())
                 .timestamp(OffsetDateTime.now())
                 .properties(null);
     }
 
     @When("I POST the event payload to the \\/events endpoint")
-    public void i_post_the_registration_payload_to_the_registrations_endpoint() {
+    public void i_post_the_event_payload_to_the_events_endpoint() {
         try {
-            credentials = new Credentials()
-                    .applicationName(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
-                    .password("pa$$w0rd");
-            token = api.authenticateApplicationAndGetToken(credentials);
+
             lastApiResponse = api.reportEventWithHttpInfo(event);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
