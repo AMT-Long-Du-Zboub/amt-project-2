@@ -16,3 +16,5 @@ Feature: Basic operations on authentication
     And I have an incorrect authentication payload
     When I POST the authentication payload to the /auth endpoint
     Then I receive a 404 status code for auth
+
+

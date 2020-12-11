@@ -56,6 +56,12 @@ public class AuthSteps {
                 .applicationName("notCorrectAtAll")
                 .password("pa$$w0rd");
     }
+    @And("I have an authentication payload with wrong password")
+    public void i_have_an_authentication_payload_with_wrong_password() {
+        credentials = new Credentials()
+                .applicationName(RegistrationsSteps.lastReceivedRegistration.getApplicationName())
+                .password("wrong");
+    }
     
     @When("I POST the authentication payload to the \\/auth endpoint")
     public void i_post_the_authentication_payload_to_the_auth_endpoint() {

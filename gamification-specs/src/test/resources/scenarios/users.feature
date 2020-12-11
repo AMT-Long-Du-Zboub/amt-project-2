@@ -3,7 +3,7 @@ Feature: Basic operation on users
   Background:
     Given there is a Gamification server
 
-    Scenario: get a user
+    Scenario: get a user when there is none does not work
       Given I have a registration payload
       And I POST the registration payload to the /registrations endpoint
       And I have a correct authentication payload

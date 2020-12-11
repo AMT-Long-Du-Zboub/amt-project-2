@@ -3,6 +3,8 @@ package amt.project2.gamification.api.spec.steps;
 import amt.project2.gamification.ApiException;
 import amt.project2.gamification.ApiResponse;
 import amt.project2.gamification.api.DefaultApi;
+import amt.project2.gamification.api.dto.Event;
+import amt.project2.gamification.api.dto.Ladder;
 import amt.project2.gamification.api.spec.helpers.Environment;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -12,6 +14,7 @@ import io.cucumber.java.en.When;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -22,6 +25,7 @@ public class BasicSteps {
     private DefaultApi api;
 
    // Fruit fruit;
+    Ladder ladder;
 
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
@@ -114,4 +118,19 @@ public class BasicSteps {
         lastStatusCode = lastApiException.getCode();
     }
 
+    @And("I have a ladder payload")
+    public void iHaveALadderPayload() {
+        ladder = new Ladder().level(0).title("title").nbrPoint(0);
+
+    }
+
+    @And("I POST the ladder payload to the \\/ladder endpoint")
+    public void iPOSTTheLadderPayloadToTheLadderEndpoint() {
+        try {
+            lastApiResponse = api.addLadderWithHttpInfo(ladder);
+            processApiResponse(lastApiResponse);
+        } catch (ApiException e) {
+            processApiException(e);
+        }
+    }
 }
