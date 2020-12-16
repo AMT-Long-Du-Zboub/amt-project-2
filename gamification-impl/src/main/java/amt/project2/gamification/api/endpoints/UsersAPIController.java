@@ -154,7 +154,6 @@ public class UsersAPIController implements UsersApi {
 
             history.addHistoryItem(badge);
         }
-        
         return history;
     }
 }
