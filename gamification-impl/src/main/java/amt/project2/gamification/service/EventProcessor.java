@@ -1,8 +1,6 @@
 package amt.project2.gamification.service;
 
 import amt.project2.gamification.api.dto.Event;
-import amt.project2.gamification.api.dto.Rule;
-import amt.project2.gamification.api.dto.User;
 import amt.project2.gamification.entities.*;
 import amt.project2.gamification.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +8,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -31,6 +28,9 @@ public class EventProcessor {
 
     @Autowired
     HistoryPointRepository historyPointRepository;
+
+    @Autowired
+    UserBadgeRepository userBadgeRepository;
 
     @Async
     @Transactional
@@ -69,8 +69,9 @@ public class EventProcessor {
 
         if (ruleEntity.getAwardBadge() != null && !ruleEntity.getAwardBadge().isEmpty()){
             BadgeEntity badgeEntity = badgeRepository.findByApplicationEntityNameAndName(applicationEntity.getName(), ruleEntity.getAwardBadge()).orElse(null);
+
             if (badgeEntity != null){
-                user.addBadge(badgeEntity);
+                newUserBadge(badgeEntity, user, applicationEntity);
             }
         }
         userRepository.save(user);
@@ -87,5 +88,18 @@ public class EventProcessor {
         historyPointEntity.setTotalOfPointAfterAwarded(TotalAfterAdd);
         historyPointEntity.setWhenPointAwarded(formatter.format(date));
         historyPointRepository.save(historyPointEntity);
+    }
+
+    private void newUserBadge(BadgeEntity badgeEntity, UserEntity userEntity, ApplicationEntity applicationEntity){
+        UserBadgeEntity userBadgeEntity = new UserBadgeEntity();
+
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
+
+        userBadgeEntity.setBadgeEntity(badgeEntity);
+        userBadgeEntity.setApplicationEntity(applicationEntity);
+        userBadgeEntity.setUserEntity(userEntity);
+        userBadgeEntity.setDateAwarded(formatter.format(date));
+        userBadgeRepository.save(userBadgeEntity);
     }
 }

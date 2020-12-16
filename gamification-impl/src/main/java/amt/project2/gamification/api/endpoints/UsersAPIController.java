@@ -3,8 +3,10 @@ package amt.project2.gamification.api.endpoints;
 import amt.project2.gamification.api.dto.*;
 import amt.project2.gamification.entities.ApplicationEntity;
 import amt.project2.gamification.entities.HistoryPointEntity;
+import amt.project2.gamification.entities.UserBadgeEntity;
 import amt.project2.gamification.entities.UserEntity;
 import amt.project2.gamification.repositories.HistoryPointRepository;
+import amt.project2.gamification.repositories.UserBadgeRepository;
 import amt.project2.gamification.repositories.UserRepository;
 import amt.project2.gamification.api.UsersApi;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 public class UsersAPIController implements UsersApi {
@@ -29,6 +33,9 @@ public class UsersAPIController implements UsersApi {
     @Autowired
     HttpServletRequest req;
 
+    @Autowired
+    UserBadgeRepository userBadgeRepository;
+
     public ResponseEntity<User> getUserId( @PathVariable("id") String userId) {
 
         ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
@@ -39,16 +46,32 @@ public class UsersAPIController implements UsersApi {
 
         UserEntity userEntity = userRepository.findByApplicationEntityNameAndIdInGamifiedApplication(
                 targetApp.getName(), userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return ResponseEntity.ok(toUser(userEntity));
+        return ResponseEntity.ok(toUser(userEntity, targetApp));
     }
 
-    private User toUser(UserEntity entity) {
+    private User toUser(UserEntity entity, ApplicationEntity app) {
         User user = new User();
         user.setUserId(entity.getIdInGamifiedApplication());
         user.setNbrPointOfUser(entity.getNbrPoint());
         user.setLadderOfUser(entity.getLadderSummary());
-        user.setBadges(entity.getBadgesSummary());
+        user.setBadges(provideBadgeSummary(entity.getIdInGamifiedApplication(),app.getName()));
         return user;
+    }
+
+    public List<BadgeSummary> provideBadgeSummary(String userIdGamified, String appName){
+        List<BadgeSummary> badgeSummaries = new ArrayList<>();
+
+        Collection<UserBadgeEntity> userBadgeEntities = userBadgeRepository.
+                findByApplicationEntityNameAndUserEntityIdInGamifiedApplication(appName, userIdGamified);
+
+        for (UserBadgeEntity userBadgeEntity : userBadgeEntities) {
+            BadgeSummary badgeSummary = new BadgeSummary();
+            badgeSummary.setName(userBadgeEntity.getBadgeEntity().getName());
+            badgeSummary.setDescription(userBadgeEntity.getBadgeEntity().getDescription());
+            badgeSummaries.add(badgeSummary);
+        }
+        return badgeSummaries;
+
     }
 
     public ResponseEntity<TopTenByPoint> top10ByPoint(){
@@ -78,6 +101,10 @@ public class UsersAPIController implements UsersApi {
     public ResponseEntity<HistoryOfPointForAnUser> getHistoryByUserId(@PathVariable("id") String userId){
         ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
 
+        if (userId == null){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
+
         Collection<HistoryPointEntity> historyOfUser = historyPointRepository
                 .findByApplicationEntityNameAndUserEntityIdInGamifiedApplicationOrderByWhenPointAwardedAsc(targetApp.getName(), userId);
 
@@ -96,6 +123,38 @@ public class UsersAPIController implements UsersApi {
 
             history.addHistoryItem(historyOfPoint);
         }
+        return history;
+    }
+
+    public ResponseEntity<BadgeAwardedHistoryForAnUser> getBadgeAwardedHistory(@PathVariable("id") String userId){
+        ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
+
+        if (userId == null){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
+
+
+        Collection<UserBadgeEntity> userBadgeEntity = userBadgeRepository
+                .findByApplicationEntityNameAndUserEntityIdInGamifiedApplicationOrderByDateAwardedAsc(targetApp.getName(), userId);
+
+        BadgeAwardedHistoryForAnUser history = provideBadgeAwardedHistory(userBadgeEntity);
+
+
+        return ResponseEntity.ok(history);
+    }
+
+    private BadgeAwardedHistoryForAnUser provideBadgeAwardedHistory(Collection<UserBadgeEntity> userBadgeEntities){
+        BadgeAwardedHistoryForAnUser history = new BadgeAwardedHistoryForAnUser();
+
+        for (UserBadgeEntity userBadgeEntity:userBadgeEntities) {
+            BadgeAwardedHistory badge = new BadgeAwardedHistory();
+            badge.setName(userBadgeEntity.getBadgeEntity().getName());
+            badge.setDescription(userBadgeEntity.getBadgeEntity().getDescription());
+            badge.setDate(userBadgeEntity.getDateAwarded());
+
+            history.addHistoryItem(badge);
+        }
+        
         return history;
     }
 }
