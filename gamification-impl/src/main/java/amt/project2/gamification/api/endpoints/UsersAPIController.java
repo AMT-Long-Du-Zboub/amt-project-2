@@ -2,10 +2,10 @@ package amt.project2.gamification.api.endpoints;
 
 import amt.project2.gamification.api.dto.*;
 import amt.project2.gamification.entities.ApplicationEntity;
-import amt.project2.gamification.entities.HistoryPointEntity;
+import amt.project2.gamification.entities.AwardedPointHistoryEntity;
 import amt.project2.gamification.entities.UserBadgeEntity;
 import amt.project2.gamification.entities.UserEntity;
-import amt.project2.gamification.repositories.HistoryPointRepository;
+import amt.project2.gamification.repositories.AwardedPointHistoryRepository;
 import amt.project2.gamification.repositories.UserBadgeRepository;
 import amt.project2.gamification.repositories.UserRepository;
 import amt.project2.gamification.api.UsersApi;
@@ -28,7 +28,7 @@ public class UsersAPIController implements UsersApi {
     UserRepository userRepository;
 
     @Autowired
-    HistoryPointRepository historyPointRepository;
+    AwardedPointHistoryRepository awardedPointHistoryRepository;
 
     @Autowired
     HttpServletRequest req;
@@ -98,35 +98,35 @@ public class UsersAPIController implements UsersApi {
         return topTenByPoint;
     }
 
-    public ResponseEntity<HistoryOfPointForAnUser> getHistoryByUserId(@PathVariable("id") String userId){
+    public ResponseEntity<AwardedPointHistoryForAnUser> getHistoryByUserId(@PathVariable("id") String userId){
         ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
 
         if (userId == null){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
 
-        Collection<HistoryPointEntity> historyOfUser = historyPointRepository
+        Collection<AwardedPointHistoryEntity> historyOfUser = awardedPointHistoryRepository
                 .findByApplicationEntityNameAndUserEntityIdInGamifiedApplicationOrderByWhenPointAwardedAsc(targetApp.getName(), userId);
 
-        HistoryOfPointForAnUser history = provideHistoryOfPoint(historyOfUser);
+        AwardedPointHistoryForAnUser history = provideHistoryOfPoint(historyOfUser);
         return ResponseEntity.ok(history);
     }
 
-    public HistoryOfPointForAnUser provideHistoryOfPoint(Collection<HistoryPointEntity> historyOfUser){
-        HistoryOfPointForAnUser history = new HistoryOfPointForAnUser();
-        for (HistoryPointEntity entity: historyOfUser) {
-            HistoryOfPoint historyOfPoint = new HistoryOfPoint();
+    public AwardedPointHistoryForAnUser provideHistoryOfPoint(Collection<AwardedPointHistoryEntity> historyOfUser){
+        AwardedPointHistoryForAnUser history = new AwardedPointHistoryForAnUser();
+        for (AwardedPointHistoryEntity entity: historyOfUser) {
+            AwardedPointHistory awardedPointHistory = new AwardedPointHistory();
 
-            historyOfPoint.setDate(entity.getWhenPointAwarded());
-            historyOfPoint.setPointAwarded(entity.getPointAwarded());
-            historyOfPoint.setTotalAfter(entity.getTotalOfPointAfterAwarded());
+            awardedPointHistory.setDate(entity.getWhenPointAwarded());
+            awardedPointHistory.setPointAwarded(entity.getPointAwarded());
+            awardedPointHistory.setTotalAfter(entity.getTotalOfPointAfterAwarded());
 
-            history.addHistoryItem(historyOfPoint);
+            history.addHistoryItem(awardedPointHistory);
         }
         return history;
     }
 
-    public ResponseEntity<BadgeAwardedHistoryForAnUser> getBadgeAwardedHistory(@PathVariable("id") String userId){
+    public ResponseEntity<AwardedBadgeHistoryForAnUser> getBadgeAwardedHistory(@PathVariable("id") String userId){
         ApplicationEntity targetApp = (ApplicationEntity) req.getAttribute("app");
 
         if (userId == null){
@@ -137,17 +137,17 @@ public class UsersAPIController implements UsersApi {
         Collection<UserBadgeEntity> userBadgeEntity = userBadgeRepository
                 .findByApplicationEntityNameAndUserEntityIdInGamifiedApplicationOrderByDateAwardedAsc(targetApp.getName(), userId);
 
-        BadgeAwardedHistoryForAnUser history = provideBadgeAwardedHistory(userBadgeEntity);
+        AwardedBadgeHistoryForAnUser history = provideBadgeAwardedHistory(userBadgeEntity);
 
 
         return ResponseEntity.ok(history);
     }
 
-    private BadgeAwardedHistoryForAnUser provideBadgeAwardedHistory(Collection<UserBadgeEntity> userBadgeEntities){
-        BadgeAwardedHistoryForAnUser history = new BadgeAwardedHistoryForAnUser();
+    private AwardedBadgeHistoryForAnUser provideBadgeAwardedHistory(Collection<UserBadgeEntity> userBadgeEntities){
+        AwardedBadgeHistoryForAnUser history = new AwardedBadgeHistoryForAnUser();
 
         for (UserBadgeEntity userBadgeEntity:userBadgeEntities) {
-            BadgeAwardedHistory badge = new BadgeAwardedHistory();
+            AwardedBadgeHistory badge = new AwardedBadgeHistory();
             badge.setName(userBadgeEntity.getBadgeEntity().getName());
             badge.setDescription(userBadgeEntity.getBadgeEntity().getDescription());
             badge.setDate(userBadgeEntity.getDateAwarded());

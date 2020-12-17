@@ -27,7 +27,7 @@ public class EventProcessor {
     BadgeRepository badgeRepository;
 
     @Autowired
-    HistoryPointRepository historyPointRepository;
+    AwardedPointHistoryRepository awardedPointHistoryRepository;
 
     @Autowired
     UserBadgeRepository userBadgeRepository;
@@ -81,13 +81,13 @@ public class EventProcessor {
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
 
-        HistoryPointEntity historyPointEntity = new HistoryPointEntity();
-        historyPointEntity.setApplicationEntity(applicationEntity);
-        historyPointEntity.setUserEntity(user);
-        historyPointEntity.setPointAwarded(nbrPoint);
-        historyPointEntity.setTotalOfPointAfterAwarded(TotalAfterAdd);
-        historyPointEntity.setWhenPointAwarded(formatter.format(date));
-        historyPointRepository.save(historyPointEntity);
+        AwardedPointHistoryEntity awardedPointHistoryEntity = new AwardedPointHistoryEntity();
+        awardedPointHistoryEntity.setApplicationEntity(applicationEntity);
+        awardedPointHistoryEntity.setUserEntity(user);
+        awardedPointHistoryEntity.setPointAwarded(nbrPoint);
+        awardedPointHistoryEntity.setTotalOfPointAfterAwarded(TotalAfterAdd);
+        awardedPointHistoryEntity.setWhenPointAwarded(formatter.format(date));
+        awardedPointHistoryRepository.save(awardedPointHistoryEntity);
     }
 
     private void newUserBadge(BadgeEntity badgeEntity, UserEntity userEntity, ApplicationEntity applicationEntity){

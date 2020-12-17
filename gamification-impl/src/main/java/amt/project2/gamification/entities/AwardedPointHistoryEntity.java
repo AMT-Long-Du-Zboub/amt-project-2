@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-public class HistoryPointEntity implements Serializable {
+public class AwardedPointHistoryEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

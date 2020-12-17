@@ -110,7 +110,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
 
-  /users/{id}/historyPoint:
+  /users/{id}/awardedPointHistory:
     get:
       description: get history of an user by id
       operationId: getHistoryByUserId
@@ -126,7 +126,7 @@ paths:
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/HistoryOfPointForAnUser'
+                $ref: '#/components/schemas/AwardedPointHistoryForAnUser'
 
 
   /users/top10bypoint:
@@ -141,7 +141,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TopTenByPoint'
 
-  /users/{id}/BadgeAwardedHistory:
+  /users/{id}/awardedBadgeHistory:
     get:
       description: List of the badge awarded by an user
       operationId: getBadgeAwardedHistory
@@ -157,7 +157,7 @@ paths:
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/BadgeAwardedHistoryForAnUser'
+                $ref: '#/components/schemas/AwardedBadgeHistoryForAnUser'
 
   /events/:
     post:
@@ -305,7 +305,7 @@ components:
             $ref: '#/components/schemas/UserPoint'
           maxItems: 10
 
-    BadgeAwardedHistory:
+    AwardedBadgeHistory:
       type: object
       properties:
         name:
@@ -315,15 +315,15 @@ components:
         date:
           type: string
 
-    BadgeAwardedHistoryForAnUser:
+    AwardedBadgeHistoryForAnUser:
       type: object
       properties:
         history:
           type: array
           items:
-            $ref: '#/components/schemas/BadgeAwardedHistory'
+            $ref: '#/components/schemas/AwardedBadgeHistory'
 
-    HistoryOfPoint:
+    AwardedPointHistory:
       type: object
       properties:
         date:
@@ -333,13 +333,13 @@ components:
         totalAfter:
           type: integer
 
-    HistoryOfPointForAnUser:
+    AwardedPointHistoryForAnUser:
       type: object
       properties:
         history:
           type: array
           items:
-            $ref: '#/components/schemas/HistoryOfPoint'
+            $ref: '#/components/schemas/AwardedPointHistory'
 
     BadgeSummary:
       type: object
