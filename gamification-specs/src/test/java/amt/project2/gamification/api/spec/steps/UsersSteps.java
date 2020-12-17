@@ -8,27 +8,21 @@ import amt.project2.gamification.api.DefaultApi;
 import amt.project2.gamification.api.dto.Registration;
 import amt.project2.gamification.api.dto.Credentials;
 import amt.project2.gamification.api.dto.Token;
-import amt.project2.gamification.api.dto.Badge;
-import io.cucumber.java.en.Given;
+
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.en.And;
-
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class UsersSteps {
 
     private Environment environment;
     private DefaultApi api;
 
-    Registration registration;
     Credentials credentials;
-    Badge badge;
     Token token;
 
     private ApiResponse lastApiResponse;
@@ -44,13 +38,10 @@ public class UsersSteps {
         this.api = environment.getApi();
     }
 
-
-
     @Then("I receive a {int} status code for users")
     public void i_receive_a_status_code_for_users(int expectedStatusCode) throws Throwable {
         assertEquals(expectedStatusCode, lastStatusCode);
     }
-
 
     @When("I send a GET to the /users endpoint")
     public void i_send_a_get_to_the_users_endpoint() {
@@ -65,7 +56,6 @@ public class UsersSteps {
             processApiException(e);
         }
     }
-
 
     private void processApiResponse(ApiResponse apiResponse) {
         lastApiResponse = apiResponse;

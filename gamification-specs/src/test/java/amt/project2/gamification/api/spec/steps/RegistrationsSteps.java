@@ -39,13 +39,10 @@ public class RegistrationsSteps {
 
     @Given("I have a registration payload")
     public void i_have_a_registration_payload() {
-      // if (lastReceivedRegistration == null) {
             registration = new Registration()
                     .applicationName(UUID.randomUUID().toString())
                     .password("pa$$w0rd");
             lastReceivedRegistration = registration;
-          // api.getApiClient().setApiKey("X-API-KEY");
-      //  }
     }
     @Then("I receive a {int} status code")
     public void i_receive_a_status_code(int expectedStatusCode) throws Throwable {
@@ -57,7 +54,6 @@ public class RegistrationsSteps {
         try {
             lastApiResponse = api.addApplicationWithHttpInfo(registration);
             apiKey = (Token) lastApiResponse.getData();
-           // api.getApiClient().setApiKey(apiKey.getApiKey());
             api.getApiClient().addDefaultHeader("X-API-KEY", apiKey.getApiKey());
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {

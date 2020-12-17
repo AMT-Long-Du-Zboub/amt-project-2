@@ -12,20 +12,16 @@ import amt.project2.gamification.api.dto.Badge;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.en.And;
-
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class BadgesSteps {
 
     private Environment environment;
     private DefaultApi api;
 
-    Registration registration;
     Credentials credentials;
     Badge badge;
     Token token;
@@ -34,11 +30,8 @@ public class BadgesSteps {
     private ApiException lastApiException;
     private boolean lastApiCallThrewException;
     private int lastStatusCode;
-    public static Token apiKey;
-
 
     private String lastReceivedLocationHeader;
-    private Registration lastReceivedRegistration;
 
     public BadgesSteps(Environment environment) {
         this.environment = environment;
@@ -58,6 +51,7 @@ public class BadgesSteps {
             processApiException(e);
         }
     }
+
     @When("I POST the badge payload to the \\/badges endpoint with wrong credentials")
     public void i_post_the_badge_payload_to_the_badges_with_wrong_credentials_endpoint() {
         try {
@@ -83,14 +77,13 @@ public class BadgesSteps {
     @When("I send a GET to the /badges endpoint")
     public void i_send_a_get_to_the_badges_endpoint() {
         try {
-
             lastApiResponse = api.getBadgesWithHttpInfo();
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);
         }
-       // throw new io.cucumber.java.PendingException();
     }
+
     @When("I send a GET to the /badges endpoint with wrong credentials")
     public void i_send_a_get_to_the_badges_with_wrong_credentials_endpoint()  {
         try {
@@ -99,7 +92,6 @@ public class BadgesSteps {
         } catch (ApiException e) {
             processApiException(e);
         }
-        // throw new io.cucumber.java.PendingException();
     }
 
    private void processApiResponse(ApiResponse apiResponse) {

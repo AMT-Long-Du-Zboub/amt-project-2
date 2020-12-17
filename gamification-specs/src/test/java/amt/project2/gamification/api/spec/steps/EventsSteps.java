@@ -6,20 +6,16 @@ import amt.project2.gamification.ApiException;
 import amt.project2.gamification.ApiResponse;
 import amt.project2.gamification.api.DefaultApi;
 import amt.project2.gamification.api.dto.Event;
-import amt.project2.gamification.api.dto.Credentials;
-import amt.project2.gamification.api.dto.Token;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.en.And;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class EventsSteps {
 
@@ -27,8 +23,6 @@ public class EventsSteps {
     private DefaultApi api;
 
     Event event;
-    Credentials credentials;
-    Token token;
 
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
@@ -54,7 +48,6 @@ public class EventsSteps {
     @When("I POST the event payload to the \\/events endpoint")
     public void i_post_the_event_payload_to_the_events_endpoint() {
         try {
-
             lastApiResponse = api.reportEventWithHttpInfo(event);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
@@ -66,6 +59,7 @@ public class EventsSteps {
     public void i_receive_a_status_code_for_events(int expectedStatusCode) throws Throwable {
         assertEquals(expectedStatusCode, lastStatusCode);
     }
+
     private void processApiResponse(ApiResponse apiResponse) {
         lastApiResponse = apiResponse;
         lastApiCallThrewException = false;
@@ -81,5 +75,4 @@ public class EventsSteps {
         lastApiException = apiException;
         lastStatusCode = lastApiException.getCode();
     }
-
 }

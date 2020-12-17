@@ -3,11 +3,9 @@ package amt.project2.gamification.api.spec.steps;
 import amt.project2.gamification.ApiException;
 import amt.project2.gamification.ApiResponse;
 import amt.project2.gamification.api.DefaultApi;
-import amt.project2.gamification.api.dto.Credentials;
-import amt.project2.gamification.api.dto.Event;
 import amt.project2.gamification.api.dto.Rule;
-import amt.project2.gamification.api.dto.Token;
 import amt.project2.gamification.api.spec.helpers.Environment;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -21,14 +19,12 @@ public class RulesSteps {
     private Environment environment;
     private DefaultApi api;
 
-
     Rule rule;
 
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
     private boolean lastApiCallThrewException;
     private int lastStatusCode;
-
     private String lastReceivedLocationHeader;
 
     public  RulesSteps(Environment environment) {
@@ -42,7 +38,6 @@ public class RulesSteps {
                 .type(UUID.randomUUID().toString())
                 .awardPoint(0)
                 .awardBadge(UUID.randomUUID().toString());
-        
     }
 
     @When("I POST the rule payload to the \\/rules endpoint")
@@ -64,10 +59,12 @@ public class RulesSteps {
             processApiException(e);
         }
     }
+
     @Then("I receive a {int} status code for rules")
     public void i_receive_a_status_code_for_rules(int expectedStatusCode) throws Throwable {
         assertEquals(expectedStatusCode, lastStatusCode);
     }
+
     private void processApiResponse(ApiResponse apiResponse) {
         lastApiResponse = apiResponse;
         lastApiCallThrewException = false;
@@ -83,6 +80,5 @@ public class RulesSteps {
         lastApiException = apiException;
         lastStatusCode = lastApiException.getCode();
     }
-
 
 }

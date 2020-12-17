@@ -3,20 +3,13 @@ package amt.project2.gamification.api.spec.steps;
 import amt.project2.gamification.ApiException;
 import amt.project2.gamification.ApiResponse;
 import amt.project2.gamification.api.DefaultApi;
-import amt.project2.gamification.api.dto.Event;
 import amt.project2.gamification.api.dto.Ladder;
 import amt.project2.gamification.api.spec.helpers.Environment;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class BasicSteps {
@@ -24,7 +17,6 @@ public class BasicSteps {
     private Environment environment;
     private DefaultApi api;
 
-   // Fruit fruit;
     Ladder ladder;
 
     private ApiResponse lastApiResponse;
@@ -33,7 +25,6 @@ public class BasicSteps {
     private int lastStatusCode;
 
     private String lastReceivedLocationHeader;
-   // private Fruit lastReceivedFruit;
 
     public BasicSteps(Environment environment) {
         this.environment = environment;
@@ -45,62 +36,20 @@ public class BasicSteps {
         assertNotNull(api);
     }
 
-    /*@Given("I have a fruit payload")
-    public void i_have_a_fruit_payload() throws Throwable {
-        fruit = new amt.project2.gamification.dto.Fruit()
-          .kind("banana")
-          .colour("yellow")
-          .size("medium")
-          .weight("light")
-          .expirationDate(LocalDate.now())
-          .expirationDateTime(OffsetDateTime.now());
+    @And("I have a ladder payload")
+    public void iHaveALadderPayload() {
+        ladder = new Ladder().level(0).title("title").nbrPoint(0);
     }
 
-    @When("^I POST the fruit payload to the /fruits endpoint$")
-    public void i_POST_the_fruit_payload_to_the_fruits_endpoint() throws Throwable {
+    @And("I POST the ladder payload to the /ladder endpoint")
+    public void iPOSTTheLadderPayloadToTheLadderEndpoint() {
         try {
-            lastApiResponse = api.createFruitWithHttpInfo(fruit);
+            lastApiResponse = api.addLadderWithHttpInfo(ladder);
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
             processApiException(e);
         }
-    }*/
-
-
-
-   /* @When("^I send a GET to the /fruits endpoint$")
-    public void iSendAGETToTheFruitsEndpoint() {
-        try {
-            lastApiResponse = api.getFruitsWithHttpInfo();
-            processApiResponse(lastApiResponse);
-        } catch (ApiException e) {
-            processApiException(e);
-        }
-    }*/
-
-    @Then("I receive a {int} status code with a location header")
-    public void iReceiveAStatusCodeWithALocationHeader(int arg0) {
     }
-
-
-
-
- /*   @When("I send a GET to the URL in the location header")
-    public void iSendAGETToTheURLInTheLocationHeader() {
-        Integer id = Integer.parseInt(lastReceivedLocationHeader.substring(lastReceivedLocationHeader.lastIndexOf('/') + 1));
-        try {
-            lastApiResponse = api.getFruitWithHttpInfo(id);
-            processApiResponse(lastApiResponse);
-            lastReceivedFruit = (Fruit)lastApiResponse.getData();
-        } catch (ApiException e) {
-            processApiException(e);
-        }
-    }
-*/
-  /*  @And("I receive a payload that is the same as the fruit payload")
-    public void iReceiveAPayloadThatIsTheSameAsTheFruitPayload() {
-        assertEquals(fruit, lastReceivedFruit);
-    }*/
 
     private void processApiResponse(ApiResponse apiResponse) {
         lastApiResponse = apiResponse;
@@ -118,19 +67,4 @@ public class BasicSteps {
         lastStatusCode = lastApiException.getCode();
     }
 
-    @And("I have a ladder payload")
-    public void iHaveALadderPayload() {
-        ladder = new Ladder().level(0).title("title").nbrPoint(0);
-
-    }
-
-    @And("I POST the ladder payload to the \\/ladder endpoint")
-    public void iPOSTTheLadderPayloadToTheLadderEndpoint() {
-        try {
-            lastApiResponse = api.addLadderWithHttpInfo(ladder);
-            processApiResponse(lastApiResponse);
-        } catch (ApiException e) {
-            processApiException(e);
-        }
-    }
 }

@@ -7,24 +7,19 @@ import amt.project2.gamification.api.DefaultApi;
 import amt.project2.gamification.api.dto.Registration;
 import amt.project2.gamification.api.dto.Credentials;
 import amt.project2.gamification.api.dto.Token;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.And;
 
-
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class AuthSteps {
 
     private Environment environment;
     private DefaultApi api;
 
-    Registration registration;
     Credentials credentials;
 
     private ApiResponse<Token> lastApiResponse;
@@ -33,15 +28,12 @@ public class AuthSteps {
     private int lastStatusCode;
     public static Token apiKey;
 
-    private String appName = "test";
-
     private String lastReceivedLocationHeader;
 
     public AuthSteps(Environment environment) {
         this.environment = environment;
         this.api = environment.getApi();
     }
-
 
     @And("I have a correct authentication payload")
     public void i_have_a_correct_authentication_payload() {
@@ -68,7 +60,6 @@ public class AuthSteps {
         try {
             lastApiResponse = api.authenticateApplicationAndGetTokenWithHttpInfo(credentials);
             apiKey = (Token) lastApiResponse.getData();
-            // api.getApiClient().setApiKey(apiKey.getApiKey());
             api.getApiClient().addDefaultHeader("X-API-KEY", apiKey.getApiKey());
             processApiResponse(lastApiResponse);
         } catch (ApiException e) {
@@ -79,8 +70,6 @@ public class AuthSteps {
     public void i_receive_a_status_code_for_auth(int expectedStatusCode) throws Throwable {
         assertEquals(expectedStatusCode, lastStatusCode);
     }
-
-
 
     private void processApiResponse(ApiResponse apiResponse) {
         lastApiResponse = apiResponse;
