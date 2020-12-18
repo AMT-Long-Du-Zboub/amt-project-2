@@ -7,6 +7,11 @@ import java.io.Serializable;
 
 @Entity
 @Data
+
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"application_entity_id", "type"})
+})
+
 public class RuleEntity implements Serializable {
 
     @Id

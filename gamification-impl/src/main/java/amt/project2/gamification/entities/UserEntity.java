@@ -8,6 +8,9 @@ import java.io.Serializable;
 
 @Entity
 @Data
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"application_entity_id", "id_in_gamified_application"})
+})
 public class UserEntity implements Serializable {
 
     @Id
@@ -20,6 +23,7 @@ public class UserEntity implements Serializable {
     @ManyToOne
     private LadderEntity actualLadder;
 
+    @Column(name = "id_in_gamified_application")
     private String idInGamifiedApplication;
 
     private int nbrPoint;

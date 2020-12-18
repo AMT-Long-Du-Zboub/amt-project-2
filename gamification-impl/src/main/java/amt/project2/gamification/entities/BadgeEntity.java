@@ -7,6 +7,9 @@ import java.io.Serializable;
 
 @Entity
 @Data
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"application_entity_id", "name"})
+})
 public class BadgeEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
