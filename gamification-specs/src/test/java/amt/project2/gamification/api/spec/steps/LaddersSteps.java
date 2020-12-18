@@ -18,7 +18,7 @@ public class LaddersSteps {
     private Environment environment;
     private DefaultApi api;
 
-    Ladder ladder;
+    private Ladder ladder;
 
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
@@ -31,7 +31,6 @@ public class LaddersSteps {
         this.environment = environment;
         this.api = environment.getApi();
     }
-
 
     @And("I have a ladder payload")
     public void iHaveALadderPayload() {

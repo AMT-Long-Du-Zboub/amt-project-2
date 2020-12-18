@@ -19,3 +19,4 @@ Feature: Basic operations on ladders
     When I send a GET to the /ladder endpoint
     Then I receive a 200 status code for ladders
 
+
