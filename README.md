@@ -29,8 +29,11 @@ Request who can be performed :
 
 ### [badges-api-controller](http://localhost:8080/swagger-ui/#/badges-api-controller)
 Endpoint : ``/badges``
+
 Request who can be performed :
+
 ``GET`` : Obtain the badge list recorded to the application
+
 ``POST`` : Add a new badge in the list for the application
 
 ### [events-api-controller](http://localhost:8080/swagger-ui/#/events-api-controller)
