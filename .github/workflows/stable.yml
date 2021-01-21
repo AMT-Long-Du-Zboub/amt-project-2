@@ -27,5 +27,6 @@ jobs:
       - name: Build application Docker image
         run: |
           echo ${{ secrets.token }} | docker login -u serphentas --password-stdin
-          docker build -t serphentas/amt-project-2 .
+          cd gamification-impl
+          docker build -t serphentas/amt-project-2
           docker push serphentas/amt-project-2
