@@ -79,17 +79,20 @@ Request who can be performed :
 
 ``GET`` : Obtain the details of an user
 
+
 Endpoint : ``/users/{id}/awardedBadgeHistory``
 
 Request who can be performed :
 
 ``GET`` : Obtain the badge history of an user 
 
+
 Endpoint : ``/users/{id}/awardedPointHistory``
 
 Request who can be performed :
 
 ``GET`` : Obtain the point history of an user
+
 
 Endpoint : ``/users/top10bypoint``
 
