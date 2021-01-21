@@ -1,8 +1,5 @@
-FROM maven:3.6.3-openjdk-15
+FROM openjdk:15
 
-COPY . /usr/src/gamification-impl
-WORKDIR /usr/src/gamification-impl
+COPY target/gamification-impl-1.0.0.jar /usr/src/gamification.jar
 
-RUN mvn clean package
-
-CMD java -jar target/gamification-impl-1.0.0.jar
+CMD java -jar /usr/src/gamification.jar
