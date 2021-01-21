@@ -24,7 +24,9 @@ After this you can create your ladder and badge for your application. Beware the
 ## Controller and endpoint
 ### [auth-api-controller](http://localhost:8080/swagger-ui/#/auth-api-controller)
 Endpoint : ``/auth``
+
 Request who can be performed :
+
 ``POST`` : Send the name of the application at the endpoint to obtain the linked api-key.
 
 ### [badges-api-controller](http://localhost:8080/swagger-ui/#/badges-api-controller)
@@ -38,42 +40,61 @@ Request who can be performed :
 
 ### [events-api-controller](http://localhost:8080/swagger-ui/#/events-api-controller)
 Endpoint : ``/events/``
+
 Request who can be performed :
+
 ``POST`` : Send an event to the API-REST who will deal with it and apply the right rule
 
 ### [ladders-api-controller](http://localhost:8080/swagger-ui/#/ladders-api-controller)
 Endpoint : ``/ladders``
+
 Request who can be performed :
+
 ``GET`` : To obtain the list of the ladder of the application
+
 ``POST`` : Add a new ladder of the application
 
 ### [registrations-api-controller](http://localhost:8080/swagger-ui/#/registrations-api-controller)
 Endpoint : ``/registrations``
+
 Request who can be performed :
+
 ``GET`` : List of the application registered in the Gamification API
+
 ``POST`` : Add a new application in the Gamification API and return the linked API-KEY
 
 ### [rules-api-controller](http://localhost:8080/swagger-ui/#/rules-api-controller)
 Endpoint : ``/rules``
+
 Request who can be performed :
+
 ``GET`` : To Obtain the list of the rules created by an application
+
 ``POST`` : Create a new rule for the application
 
 ### [users-api-controller](http://localhost:8080/swagger-ui/#/users-api-controller)
 Endpoint : ``/users/{id}``
+
 Request who can be performed :
+
 ``GET`` : Obtain the details of an user
 
 Endpoint : ``/users/{id}/awardedBadgeHistory``
+
 Request who can be performed :
+
 ``GET`` : Obtain the badge history of an user 
 
 Endpoint : ``/users/{id}/awardedPointHistory``
+
 Request who can be performed :
+
 ``GET`` : Obtain the point history of an user
 
 Endpoint : ``/users/top10bypoint``
+
 Request who can be performed :
+
 ``GET`` : Obtain the ten player who has the most points
 
 
