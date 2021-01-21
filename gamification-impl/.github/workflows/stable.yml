@@ -23,6 +23,7 @@ jobs:
 
       - name: Build with Maven
         run: |
+          ls -lash
           cd gamification-impl
           mvn clean package
 
