@@ -71,7 +71,12 @@ public class EventProcessor {
             BadgeEntity badgeEntity = badgeRepository.findByApplicationEntityNameAndName(applicationEntity.getName(), ruleEntity.getAwardBadge()).orElse(null);
 
             if (badgeEntity != null){
-                newUserBadge(badgeEntity, user, applicationEntity);
+                UserBadgeEntity userBadgeEntity = userBadgeRepository.findByApplicationEntityNameAndUserEntityIdInGamifiedApplicationAndBadgeEntityName(
+                        applicationEntity.getName(), user.getIdInGamifiedApplication(), ruleEntity.getAwardBadge()
+                ).orElse(null);
+                if (userBadgeEntity == null) {
+                    newUserBadge(badgeEntity, user, applicationEntity);
+                }
             }
         }
         userRepository.save(user);
