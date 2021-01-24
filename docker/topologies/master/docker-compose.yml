@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  gamif-db:
+    image: serphentas/amt-project-2-db
+    container_name: longduzboub-gamif-db
+    environment:
+      MYSQL_ROOT_PASSWORD: amt
+      MYSQL_USER: amt
+      MYSQL_PASSWORD: amt
+    ports:
+      - 3307:3306
+
+  gamif-app:
+    image: serphentas/amt-project-2-app
+    container_name: longduzboub-gamif-app
+    ports:
+      - 8080:8080
+    depends_on:
+      - gamif-db
