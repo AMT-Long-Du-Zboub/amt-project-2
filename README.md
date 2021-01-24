@@ -1,6 +1,12 @@
-
-
 # Gamification API REST
+
+## Table of contents
+
+- [1 Implementation](#1-Implementation)
+- [2 Test](#1-Implementation)
+- [3 Functionality](#3-Functionality)
+- [4 Build and run](#4-Build-and-run)
+- [5 Database link and access](#5-Database-link-and-access)
 
 # 1 Implementation
 
@@ -16,11 +22,10 @@
 
 To perform load testing on our API, we created a JMeter endpoint test plan, that performs requests (`POST`, `GET` or both depending on the endpoint) on each of the different endpoint of our API. For POST request, we send a JSON payload to the endpoint using a HTTP header manager. The requests are performed in the logical order of usage of our API, ie, first, we register a new application, then we list all the existing applications etc ... We check that the correct status code is returned with a response assertion and we check the content of the JSON payload we get as a response (when there is one) with JSON assertions: Each JSON assertion make sure of the existence of a JSON path that is supposed to be in the response payload (for example $..applicationName). The results of the load test are at the end presented as a result tree and a report for each HTTP request performed.
 
-
 # 3 Functionality
 All the endpoint of the API works and you can register, with the endpoint ``/registrations`` an application to obtain an ``API-KEY`` or recover it with the endpoint ``/auth``. You need this ``API-KEY`` in the header to perform the others action because it's with it that we can recongnize the registered app.
 
-Endpoint : ``/registrations``
+## Endpoint : ``/registrations``
 
 Request who can be performed :
 
@@ -28,7 +33,7 @@ Request who can be performed :
 
 ``POST`` : Add a new application in the Gamification API and return the linked API-KEY
 
-Endpoint : ``/auth``
+## Endpoint : ``/auth``
 
 Request who can be performed :
 
@@ -36,7 +41,7 @@ Request who can be performed :
 
 You can create ladders, and badges with the endpoints ``/ladders`` and ``/badges``. Don't forget for the ladders you need to start at the level 0 and it's progressive, 0->1->2->3 etc...
 
-Endpoint : ``/ladders``
+## Endpoint : ``/ladders``
 
 Request who can be performed :
 
@@ -44,7 +49,7 @@ Request who can be performed :
 
 ``POST`` : Add a new ladder of the application
 
-Endpoint : ``/badges``
+## Endpoint : ``/badges``
 
 Request who can be performed :
 
@@ -54,7 +59,7 @@ Request who can be performed :
 
 You can create rules via the endpoint ``/rules`` with their rewards, experience for the level or/and badges, who will be readed and executed by the endpoint ``/events/``. The user is automaticaly create when ``/events/`` is called if the user already exist he jumps this step.
 
-Endpoint : ``/rules``
+## Endpoint : ``/rules``
 
 Request who can be performed :
 
@@ -62,7 +67,7 @@ Request who can be performed :
 
 ``POST`` : Create a new rule for the application
 
-Endpoint : ``/events/``
+## Endpoint : ``/events/``
 
 Request who can be performed :
 
@@ -70,13 +75,13 @@ Request who can be performed :
 
 The endpoint for get information of an user, his history of point etc... are functional and you can call it . The only method on this endpoints is ``GET``
 
-Endpoint : ``/users/{id}``
+## Endpoint : ``/users/{id}``
 
-Endpoint : ``/users/{id}/awardedBadgeHistory``
+## Endpoint : ``/users/{id}/awardedBadgeHistory``
 
-Endpoint : ``/users/{id}/awardedPointHistory``
+## Endpoint : ``/users/{id}/awardedPointHistory``
 
-Endpoint : ``/users/top10bypoint``
+## Endpoint : ``/users/top10bypoint``
 
 # 4 Build and run
 
@@ -84,13 +89,23 @@ Endpoint : ``/users/top10bypoint``
 
 For development purposes, you should go in `gamification-impl` and run `mvn spring-boot:run` which will make Swagger available at [http://localhost:8080](http://localhost:8080).
 
+Make sure to set a `MYSQL_HOST` which has the proper database, as per instructions in [chapter 5](#5-Database-link-and-access).
+
 ## 4.2 Automatic
 
-For ease of use with [amt-project-1](https://github.com/AMT-Long-Du-Zboub/amt-project-1), you can use the `run_gamification.sh` script which will get the database IP address and make the gamification engine use it.
+For ease of use with [amt-project-1](https://github.com/AMT-Long-Du-Zboub/amt-project-1), you can use the `run_gamification.sh` script:
 
-NOTE: make sure to have deployed the Docker stack beforehand (`./run.sh` in amt-project-1).
+```
+cd docker/topologies/master
+docker-compose up
+```
 
-You can use the [Adminer page](http://localhost:8081) to access the database contents from a Web page.
+NOTE: run this **BEFORE** you start project 1.
+
+You can use the [Adminer page](http://localhost:8081) to access the database contents from a Web page. Credentials are:
+- Database: amt2
+- Username: root
+- Password: amt
 
 # 5 Database link and access
 
