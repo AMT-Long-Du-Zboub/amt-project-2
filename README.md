@@ -107,6 +107,16 @@ You can use the [Adminer page](http://localhost:8081) to access the database con
 - Username: root
 - Password: amt
 
+### Troubleshooting
+
+If you have any issues, it is wise to start over:
+
+```
+docker kill longduzboub-gamif-app longduzboub-gamif-db
+docker rm longduzboub-gamif-app longduzboub-gamif-db
+docker rmi serphentas/amt-project-2-app serphentas/amt-project-2-db
+```
+
 # 5 Database link and access
 
 Our engine directly talks to an **existing** database named `amt2`, so ensure this exists on the target database server beforehand.
