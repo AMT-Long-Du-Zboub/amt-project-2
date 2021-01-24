@@ -10,6 +10,10 @@
 
 # 1 Implementation
 
+**ADDED FEATURES**
+- Working Docker images
+- Tests
+
 # 2 Test
 
  ## Cucumber Tests
